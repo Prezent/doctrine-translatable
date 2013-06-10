@@ -3,8 +3,12 @@
 namespace Prezent\Tests\Tool;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\Common\Annotations\CachedReader;
+use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\EventManager;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver as ORMAnnotationDriver;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\Setup;
 use Metadata\MetadataFactory;
@@ -33,7 +37,14 @@ abstract class ORMTestCase extends \PHPUnit_Framework_TestCase
             'memory' => true,
         );
 
-        $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__ . '/../Fixture'), true, null, null, false);
+        AnnotationRegistry::registerFile(realpath(__DIR__ . '/../../../../vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'));
+
+        $reader = new AnnotationReader();
+        $reader = new CachedReader($reader, new ArrayCache());
+
+        $config = Setup::createConfiguration(true);
+        $config->setMetadataDriverImpl(new ORMAnnotationDriver($reader, array(__DIR__ . '/../Fixture')));
+
         $em = EntityManager::create($conn, $config, $this->getEventManager());
 
         $schemaTool = new SchemaTool($em);
