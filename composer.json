@@ -1,0 +1,30 @@
+{
+    "name": "prezent/doctrine-translatable",
+    "type": "library",
+    "description": "Translatable behaviour extension for Doctrine2",
+    "keywords": [
+        "doctrine2",
+        "extensions",
+        "translatable",
+        "i18n"
+    ],
+    "homepage": "http://www.prezent.nl",
+    "authors": [{
+        "name": "Prezent Internet B.V.",
+        "email": "github@prezent.nl"
+    }],
+    "license": "MIT",
+    "support": {
+        "wiki": "https://github.com/prezent/doctrine-translatable/tree/master/doc",
+        "issues": "https://github.com/prezent/doctrine-translatable/issues",
+        "source": "https://github.com/prezent/doctrine-translatable"
+    },
+    "require": {
+        "php": ">=5.3.2",
+        "doctrine/orm": ">=2.2,<2.5-dev",
+        "jms/metadata": "~1.1"
+    },
+    "autoload": {
+        "psr-0": { "Prezent\\Doctrine\\Translatable": "lib/" }
+    }
+}

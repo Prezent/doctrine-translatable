@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="tests/bootstrap.php">
+    <!-- Define the test suites -->
+    <testsuites>
+        <testsuite name="prezent-doctrine-translatable">
+            <directory>tests/Prezent</directory>
+        </testsuite>
+    </testsuites>
+    <!-- Code Coverage settings -->
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./lib/Prezent</directory>
+        </whitelist>
+    </filter>
+</phpunit>
