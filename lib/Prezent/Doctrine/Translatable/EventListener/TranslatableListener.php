@@ -38,6 +38,11 @@ class TranslatableListener implements EventSubscriber
     private $fallbackLocale = 'en';
 
     /**
+     * @var bool
+     */
+    private $fallbackMode = false;
+
+    /**
      * @var MetadataFactory
      */
     private $metadataFactory;
@@ -102,6 +107,28 @@ class TranslatableListener implements EventSubscriber
     }
 
     /**
+     * Get the current fallback mode
+     *
+     * @return bool True if fallback is enabled, false otherwise
+     */
+    public function getFallbackMode()
+    {
+        return $this->fallbackMode;
+    }
+    
+    /**
+     * Enable/disable fallback mode
+     *
+     * @param bool $fallbackMode
+     * @return self
+     */
+    public function setFallbackMode($fallbackMode = true)
+    {
+        $this->fallbackMode = $fallbackMode;
+        return $this;
+    }
+
+    /**
      * Getter for metadataFactory
      *
      * @return MetadataFactory
@@ -131,9 +158,13 @@ class TranslatableListener implements EventSubscriber
 
         if ($metadata->isTranslatable()) {
 
+            $locale = $this->fallbackMode
+                ? array($this->currentLocale, $this->fallbackLocale)
+                : $this->currentLocale;
+
             $translations = $this->getQuery($args->getEntityManager(), $metadata)
                 ->setParameter('object', $entity)
-                ->setParameter('locale', array($this->currentLocale, $this->fallbackLocale), Connection::PARAM_STR_ARRAY)
+                ->setParameter('locale', $locale, is_array($locale) ? Connection::PARAM_STR_ARRAY : null)
                 ->getResult();
 
             // Set current translation
@@ -142,7 +173,7 @@ class TranslatableListener implements EventSubscriber
             }
 
             // Set fallback translation
-            if (isset($translations[$this->fallbackLocale]) && !$metadata->fallbackTranslationProperty->getValue($entity)) {
+            if ($this->fallbackMode && isset($translations[$this->fallbackLocale]) && !$metadata->fallbackTranslationProperty->getValue($entity)) {
                 $metadata->fallbackTranslationProperty->setValue($entity, $translations[$this->fallbackLocale]);
             }
         }
@@ -160,8 +191,13 @@ class TranslatableListener implements EventSubscriber
             $qb = $em->createQueryBuilder();
             $qb->select('t')
                 ->from($metadata->translationEntityClass, 't', 't.locale')
-                ->where('t.object = :object')
-                ->andWhere('t.locale IN (:locale)');
+                ->where('t.object = :object');
+
+            if ($this->fallbackMode) {
+                $qb->andWhere('t.locale IN (:locale)');
+            } else {
+                $qb->andWhere('t.locale = :locale');
+            }
 
             $this->query = $qb->getQuery();
         }

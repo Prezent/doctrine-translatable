@@ -47,8 +47,9 @@ class TranslatableListenerTest extends ORMTestCase
         // setup
         $em = $this->getEntityManager();
         $listener = $this->getTranslatableListener();
-        $listener->setCurrentLocale('de')
-                 ->setFallbackLocale('en');
+        $listener->setFallbackMode(true)
+            ->setCurrentLocale('de')
+            ->setFallbackLocale('en');
 
         $en = new EntryTranslation();
         $en->setLocale('en')
@@ -67,5 +68,31 @@ class TranslatableListenerTest extends ORMTestCase
         $this->assertNotNull($entry);
         $this->assertInstanceOf('Prezent\\Tests\\Fixture\\EntryTranslation', $entry->getCurrentTranslation());
         $this->assertEquals('en', $entry->getCurrentTranslation()->getLocale());
+    }
+
+    public function testFallbackOff()
+    {
+        // setup
+        $em = $this->getEntityManager();
+        $listener = $this->getTranslatableListener();
+        $listener->setFallbackMode(false)
+            ->setCurrentLocale('de');
+
+        $en = new EntryTranslation();
+        $en->setLocale('en')
+           ->setName('foo');
+
+        $entry = new Entry();
+        $entry->addTranslation($en);
+
+        $em->persist($entry);
+        $em->flush();
+        $em->clear();
+        // end setup
+
+        $entry = $em->find('Prezent\\Tests\\Fixture\\Entry', 1);
+
+        $this->assertNotNull($entry);
+        $this->assertNull($entry->getCurrentTranslation());
     }
 }
