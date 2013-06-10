@@ -9,10 +9,14 @@
 
 namespace Prezent\Doctrine\Translatable\EventListener;
 
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
+use Doctrine\ORM\Query;
 use Metadata\Driver\DriverChain;
 use Metadata\MetadataFactory;
 
@@ -37,6 +41,11 @@ class TranslatableListener implements EventSubscriber
      * @var MetadataFactory
      */
     private $metadataFactory;
+
+    /**
+     * @var Query
+     */
+    private $query;
 
     /**
      * Constructor
@@ -118,9 +127,45 @@ class TranslatableListener implements EventSubscriber
     public function postLoad(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
-        $metadata = $this->metadataFactory->getMetadataFor(get_class($entity));
+        $metadata = $this->metadataFactory->getMetadataForClass(get_class($entity));
 
         if ($metadata->isTranslatable()) {
+
+            $translations = $this->getQuery($args->getEntityManager(), $metadata)
+                ->setParameter('object', $entity)
+                ->setParameter('locale', array($this->currentLocale, $this->fallbackLocale), Connection::PARAM_STR_ARRAY)
+                ->getResult();
+
+            // Set current translation
+            if (isset($translations[$this->currentLocale])) {
+                $metadata->currentTranslationProperty->setValue($entity, $translations[$this->currentLocale]);
+            }
+
+            // Set fallback translation
+            if (isset($translations[$this->fallbackLocale]) && !$metadata->fallbackTranslationProperty->getValue($entity)) {
+                $metadata->fallbackTranslationProperty->setValue($entity, $translations[$this->fallbackLocale]);
+            }
         }
+    }
+
+    /**
+     * Get the translations query
+     *
+     * @param EntityManager $em
+     * @return Query
+     */
+    private function getQuery(EntityManager $em, $metadata)
+    {
+        if (!$this->query) {
+            $qb = $em->createQueryBuilder();
+            $qb->select('t')
+                ->from($metadata->translationEntityClass, 't', 't.locale')
+                ->where('t.object = :object')
+                ->andWhere('t.locale IN (:locale)');
+
+            $this->query = $qb->getQuery();
+        }
+
+        return $this->query;
     }
 }
