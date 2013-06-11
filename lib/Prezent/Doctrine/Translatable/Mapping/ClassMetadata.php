@@ -72,8 +72,8 @@ class ClassMetadata extends MergeableClassMetadata
             $this->translationsProperty = $object->translationsProperty;
         }
 
-        if ($object->doctrineMetadata) {
-            $this->doctrineMetadata = $object->doctrineMetadata;
+        if ($object->translationEntityClass) {
+            $this->translationEntityClass = $object->translationEntityClass;
         }
     }
 
@@ -83,7 +83,7 @@ class ClassMetadata extends MergeableClassMetadata
     public function serialize()
     {
         return serialize(array(
-            $this->trabslationEntityClass,
+            $this->translationEntityClass,
             $this->currentTranslationProperty->name,
             $this->fallbackTranslationProperty->name,
             $this->translationsProperty->name,
