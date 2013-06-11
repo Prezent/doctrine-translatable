@@ -5,11 +5,13 @@ namespace Prezent\Tests\Fixture;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Prezent\Doctrine\Translatable\Entity\AbstractTranslation;
+use Prezent\Doctrine\Translatable\Translatable;
 
 /**
  * @ORM\Entity
  */
-class Entry
+class Entry implements Translatable
 {
     /**
      * @ORM\Id
@@ -25,7 +27,7 @@ class Entry
     private $currentTranslation;
 
     /**
-     * @ORM\OneToMany(targetEntity="Prezent\Tests\Fixture\EntryTranslation", mappedBy="object", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Prezent\Tests\Fixture\EntryTranslation", mappedBy="object", cascade={"persist"}, orphanRemoval=true)
      * @Prezent\Translations
      */
     private $translations;
@@ -56,7 +58,7 @@ class Entry
         return $this->translations;
     }
     
-    public function addTranslation(EntryTranslation $translation)
+    public function addTranslation(AbstractTranslation $translation)
     {
         if (!$this->translations->contains($translation)) {
             $this->translations[] = $translation;
@@ -66,7 +68,7 @@ class Entry
         return $this;
     }
     
-    public function removeTranslation(EntryTranslation $translation)
+    public function removeTranslation(AbstractTranslation $translation)
     {
         if ($this->translations->removeElement($translation)) {
             $translation->setObject(null);

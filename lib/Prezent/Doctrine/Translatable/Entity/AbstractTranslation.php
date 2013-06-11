@@ -10,6 +10,7 @@
 namespace Prezent\Doctrine\Translatable\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Prezent\Doctrine\Translatable\Translatable;
 
 /**
  * @ORM\MappedSuperclass
@@ -46,7 +47,7 @@ abstract class AbstractTranslation
     /**
      * Get the object
      *
-     * @return Object
+     * @return Translatable
      */
     public function getObject()
     {
@@ -56,10 +57,10 @@ abstract class AbstractTranslation
     /**
      * Set the object
      *
-     * @param object $object
+     * @param Translatable $object
      * @return self
      */
-    public function setObject($object = null)
+    public function setObject(Translatable $object = null)
     {
         if ($this->object == $object) {
             return $this;
