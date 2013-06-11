@@ -97,7 +97,7 @@ class ClassMetadata extends MergeableClassMetadata
     public function unserialize($str)
     {
         list (
-            $this->trabslationEntityClass,
+            $this->translationEntityClass,
             $currentTranslation,
             $fallbackTranslation,
             $translations,
