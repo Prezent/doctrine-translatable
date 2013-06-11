@@ -5,11 +5,12 @@ php:
     - 5.4
     - 5.5
 
-matrix:
-  allow_failures:
-    - php: 5.5
+env:
+    - DOCTRINE_VERSION="2.2.*"
+    - DOCTRINE_VERSION="2.3.*"
+    - DOCTRINE_VERSION="dev-master"
 
 before_script:
     - curl -s http://getcomposer.org/installer | php
-    - php composer.phar install --dev --no-interaction --prefer-source
+    - php composer.phar require doctrine/orm:${DOCTRINE_VERSION} doctrine/dbal:${DOCTRINE_VERSION} doctrine/common:${DOCTRINE_VERSION} --dev --no-interaction --prefer-source
     - cp phpunit.xml.dist phpunit.xml
