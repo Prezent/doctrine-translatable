@@ -10,33 +10,42 @@ class TranslatableListenerTest extends ORMTestCase
 {
     public function getFixtureClasses()
     {
-        return array(
+        $fixtures = array(
             'Prezent\\Tests\\Fixture\\Basic',
             'Prezent\\Tests\\Fixture\\BasicTranslation',
             'Prezent\\Tests\\Fixture\\Mapped',
             'Prezent\\Tests\\Fixture\\MappedTranslation',
             'Prezent\\Tests\\Fixture\\Inherited',
             'Prezent\\Tests\\Fixture\\InheritedTranslation',
-            'Prezent\\Tests\\Fixture\\Mixin',
-            'Prezent\\Tests\\Fixture\\MixinTranslation',
         );
+
+        if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
+            $fixtures[] = 'Prezent\\Tests\\Fixture\\Mixin';
+            $fixtures[] = 'Prezent\\Tests\\Fixture\\MixinTranslation';
+        }
+
+        return $fixtures;
     }
 
     public function getEntities()
     {
         return array(
-            array('Prezent\\Tests\\Fixture\\Basic',     'Prezent\\Tests\\Fixture\\BasicTranslation'),
-            array('Prezent\\Tests\\Fixture\\Mapped',    'Prezent\\Tests\\Fixture\\MappedTranslation'),
-            array('Prezent\\Tests\\Fixture\\Inherited', 'Prezent\\Tests\\Fixture\\InheritedTranslation'),
-            array('Prezent\\Tests\\Fixture\\Mixin',     'Prezent\\Tests\\Fixture\\MixinTranslation'),
+            array('5.3.0', 'Prezent\\Tests\\Fixture\\Basic',     'Prezent\\Tests\\Fixture\\BasicTranslation'),
+            array('5.3.0', 'Prezent\\Tests\\Fixture\\Mapped',    'Prezent\\Tests\\Fixture\\MappedTranslation'),
+            array('5.3.0', 'Prezent\\Tests\\Fixture\\Inherited', 'Prezent\\Tests\\Fixture\\InheritedTranslation'),
+            array('5.4.0', 'Prezent\\Tests\\Fixture\\Mixin',     'Prezent\\Tests\\Fixture\\MixinTranslation'),
         );
     }
 
     /**
      * @dataProvider getEntities
      */
-    public function testCurrentLocale($translatableClass, $translationClass)
+    public function testCurrentLocale($version, $translatableClass, $translationClass)
     {
+        if (version_compare(PHP_VERSION, $version) < 0) {
+            $this->markTestSkipped('Traits require PHP 5.4');
+        }
+
         // setup
         $em = $this->getEntityManager();
         $listener = $this->getTranslatableListener();
@@ -64,8 +73,12 @@ class TranslatableListenerTest extends ORMTestCase
     /**
      * @dataProvider getEntities
      */
-    public function testFallbackLocale($translatableClass, $translationClass)
+    public function testFallbackLocale($version, $translatableClass, $translationClass)
     {
+        if (version_compare(PHP_VERSION, $version) < 0) {
+            $this->markTestSkipped('Traits require PHP 5.4');
+        }
+
         // setup
         $em = $this->getEntityManager();
         $listener = $this->getTranslatableListener();
@@ -95,8 +108,12 @@ class TranslatableListenerTest extends ORMTestCase
     /**
      * @dataProvider getEntities
      */
-    public function testFallbackOff($translatableClass, $translationClass)
+    public function testFallbackOff($version, $translatableClass, $translationClass)
     {
+        if (version_compare(PHP_VERSION, $version) < 0) {
+            $this->markTestSkipped('Traits require PHP 5.4');
+        }
+
         // setup
         $em = $this->getEntityManager();
         $listener = $this->getTranslatableListener();
