@@ -2,8 +2,8 @@
 
 namespace Prezent\Tests\Doctrine\Translatable\Mapping;
 
-use Prezent\Tests\Fixture\Entry;
-use Prezent\Tests\Fixture\EntryTranslation;
+use Prezent\Tests\Fixture\Basic;
+use Prezent\Tests\Fixture\BasicTranslation;
 use Prezent\Tests\Tool\ORMTestCase;
 
 class TranslatableListenerTest extends ORMTestCase
@@ -11,38 +11,54 @@ class TranslatableListenerTest extends ORMTestCase
     public function getFixtureClasses()
     {
         return array(
-            'Prezent\\Tests\\Fixture\\Entry',
-            'Prezent\\Tests\\Fixture\\EntryTranslation',
+            'Prezent\\Tests\\Fixture\\Basic',
+            'Prezent\\Tests\\Fixture\\BasicTranslation',
+            'Prezent\\Tests\\Fixture\\Mapped',
+            'Prezent\\Tests\\Fixture\\MappedTranslation',
         );
     }
 
-    public function testCurrentLocale()
+    public function getEntities()
+    {
+        return array(
+            array('Prezent\\Tests\\Fixture\\Basic', 'Prezent\\Tests\\Fixture\\BasicTranslation'),
+            array('Prezent\\Tests\\Fixture\\Mapped', 'Prezent\\Tests\\Fixture\\MappedTranslation'),
+        );
+    }
+
+    /**
+     * @dataProvider getEntities
+     */
+    public function testCurrentLocale($translatableClass, $translationClass)
     {
         // setup
         $em = $this->getEntityManager();
         $listener = $this->getTranslatableListener();
         $listener->setCurrentLocale('en');
 
-        $en = new EntryTranslation();
+        $en = new $translationClass();
         $en->setLocale('en')
            ->setName('foo');
 
-        $entry = new Entry();
-        $entry->addTranslation($en);
+        $entity = new $translatableClass();
+        $entity->addTranslation($en);
 
-        $em->persist($entry);
+        $em->persist($entity);
         $em->flush();
         $em->clear();
         // end setup
 
-        $entry = $em->find('Prezent\\Tests\\Fixture\\Entry', 1);
+        $entity = $em->find($translatableClass, 1);
 
-        $this->assertNotNull($entry);
-        $this->assertInstanceOf('Prezent\\Tests\\Fixture\\EntryTranslation', $entry->getCurrentTranslation());
-        $this->assertEquals('en', $entry->getCurrentTranslation()->getLocale());
+        $this->assertNotNull($entity);
+        $this->assertInstanceOf($translationClass, $entity->getCurrentTranslation());
+        $this->assertEquals('en', $entity->getCurrentTranslation()->getLocale());
     }
 
-    public function testFallbackLocale()
+    /**
+     * @dataProvider getEntities
+     */
+    public function testFallbackLocale($translatableClass, $translationClass)
     {
         // setup
         $em = $this->getEntityManager();
@@ -51,26 +67,29 @@ class TranslatableListenerTest extends ORMTestCase
             ->setCurrentLocale('de')
             ->setFallbackLocale('en');
 
-        $en = new EntryTranslation();
+        $en = new $translationClass();
         $en->setLocale('en')
            ->setName('foo');
 
-        $entry = new Entry();
-        $entry->addTranslation($en);
+        $entity = new $translatableClass();
+        $entity->addTranslation($en);
 
-        $em->persist($entry);
+        $em->persist($entity);
         $em->flush();
         $em->clear();
         // end setup
 
-        $entry = $em->find('Prezent\\Tests\\Fixture\\Entry', 1);
+        $entity = $em->find($translatableClass, 1);
 
-        $this->assertNotNull($entry);
-        $this->assertInstanceOf('Prezent\\Tests\\Fixture\\EntryTranslation', $entry->getCurrentTranslation());
-        $this->assertEquals('en', $entry->getCurrentTranslation()->getLocale());
+        $this->assertNotNull($entity);
+        $this->assertInstanceOf($translationClass, $entity->getCurrentTranslation());
+        $this->assertEquals('en', $entity->getCurrentTranslation()->getLocale());
     }
 
-    public function testFallbackOff()
+    /**
+     * @dataProvider getEntities
+     */
+    public function testFallbackOff($translatableClass, $translationClass)
     {
         // setup
         $em = $this->getEntityManager();
@@ -78,21 +97,21 @@ class TranslatableListenerTest extends ORMTestCase
         $listener->setFallbackMode(false)
             ->setCurrentLocale('de');
 
-        $en = new EntryTranslation();
+        $en = new $translationClass();
         $en->setLocale('en')
            ->setName('foo');
 
-        $entry = new Entry();
-        $entry->addTranslation($en);
+        $entity = new $translatableClass();
+        $entity->addTranslation($en);
 
-        $em->persist($entry);
+        $em->persist($entity);
         $em->flush();
         $em->clear();
         // end setup
 
-        $entry = $em->find('Prezent\\Tests\\Fixture\\Entry', 1);
+        $entity = $em->find($translatableClass, 1);
 
-        $this->assertNotNull($entry);
-        $this->assertNull($entry->getCurrentTranslation());
+        $this->assertNotNull($entity);
+        $this->assertNull($entity->getCurrentTranslation());
     }
 }

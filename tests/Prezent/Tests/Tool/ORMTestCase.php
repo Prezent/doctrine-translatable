@@ -48,7 +48,6 @@ abstract class ORMTestCase extends \PHPUnit_Framework_TestCase
         $em = EntityManager::create($conn, $config, $this->getEventManager());
 
         $schemaTool = new SchemaTool($em);
-        $schemaTool->dropSchema($em->getMetadataFactory()->getAllMetadata());
         $schemaTool->createSchema(array_map(function ($class) use ($em) {
             return $em->getClassMetadata($class);
         }, $this->getFixtureClasses()));

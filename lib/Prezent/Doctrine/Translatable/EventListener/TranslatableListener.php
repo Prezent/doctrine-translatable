@@ -193,7 +193,7 @@ class TranslatableListener implements EventSubscriber
                 'fieldName'     => $metadata->translations->name,
                 'targetEntity'  => $metadata->targetEntity,
                 'mappedBy'      => $targetMetadata->translatable->name,
-                'indexBy'       => 'locale',
+                'indexBy'       => $targetMetadata->locale->name,
                 'cascade'       => array('persist', 'merge', 'remove'),
                 'orphanRemoval' => true,
             ));
@@ -221,6 +221,13 @@ class TranslatableListener implements EventSubscriber
                     'referencedColumnName' => 'id',
                     'onDelete'             => 'CASCADE',
                 )),
+            ));
+        }
+
+        if (!$mapping->hasField($metadata->locale->name)) {
+            $mapping->mapField(array(
+                'fieldName' => $metadata->locale->name,
+                'type' => 'string',
             ));
         }
     }

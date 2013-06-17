@@ -11,7 +11,7 @@ use Prezent\Doctrine\Translatable\Translation;
 /**
  * @ORM\Entity
  */
-class Entry implements Translatable
+class Basic implements Translatable
 {
     /**
      * @ORM\Id
@@ -27,7 +27,13 @@ class Entry implements Translatable
     private $currentTranslation;
 
     /**
-     * @Prezent\Translations(targetEntity="Prezent\Tests\Fixture\EntryTranslation")
+     * @ORM\OneToMany(
+     *     targetEntity="Prezent\Tests\Fixture\BasicTranslation",
+     *     mappedBy="translatable",
+     *     cascade={"persist", "remove", "merge"},
+     *     orphanRemoval=true
+     * )
+     * @Prezent\Translations(targetEntity="Prezent\Tests\Fixture\BasicTranslation")
      */
     private $translations;
 

@@ -11,11 +11,11 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
 {
     public function testTranslatableSerialization()
     {
-        $currentProp = new PropertyMetadata('Prezent\\Tests\\Fixture\\Entry', 'currentTranslation');
-        $transProp = new PropertyMetadata('Prezent\\Tests\\Fixture\\Entry', 'translations');
+        $currentProp = new PropertyMetadata('Prezent\\Tests\\Fixture\\Basic', 'currentTranslation');
+        $transProp = new PropertyMetadata('Prezent\\Tests\\Fixture\\Basic', 'translations');
 
-        $meta = new TranslatableMetadata('Prezent\\Tests\\Fixture\\Entry');
-        $meta->targetEntity = 'Prezent\\Tests\\Fixture\\EntryTranslation';
+        $meta = new TranslatableMetadata('Prezent\\Tests\\Fixture\\Basic');
+        $meta->targetEntity = 'Prezent\\Tests\\Fixture\\BasicTranslation';
         $meta->currentTranslation = $currentProp;
         $meta->fallbackTranslation = $currentProp;
         $meta->translations = $transProp;
@@ -31,11 +31,11 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
 
     public function testTranslationSerialization()
     {
-        $transProp = new PropertyMetadata('Prezent\\Tests\\Fixture\\EntryTranslation', 'translatable');
-        $localeProp = new PropertyMetadata('Prezent\\Tests\\Fixture\\EntryTranslation', 'locale');
+        $transProp = new PropertyMetadata('Prezent\\Tests\\Fixture\\BasicTranslation', 'translatable');
+        $localeProp = new PropertyMetadata('Prezent\\Tests\\Fixture\\BasicTranslation', 'locale');
 
-        $meta = new TranslationMetadata('Prezent\\Tests\\Fixture\\EntryTranslation');
-        $meta->targetEntity = 'Prezent\\Tests\\Fixture\\Entry';
+        $meta = new TranslationMetadata('Prezent\\Tests\\Fixture\\BasicTranslation');
+        $meta->targetEntity = 'Prezent\\Tests\\Fixture\\Basic';
         $meta->translatable = $transProp;
         $meta->locale = $localeProp;
         $meta->addPropertyMetadata($transProp);
