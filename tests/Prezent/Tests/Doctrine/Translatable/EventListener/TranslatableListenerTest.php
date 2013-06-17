@@ -17,15 +17,18 @@ class TranslatableListenerTest extends ORMTestCase
             'Prezent\\Tests\\Fixture\\MappedTranslation',
             'Prezent\\Tests\\Fixture\\Inherited',
             'Prezent\\Tests\\Fixture\\InheritedTranslation',
+            'Prezent\\Tests\\Fixture\\Mixin',
+            'Prezent\\Tests\\Fixture\\MixinTranslation',
         );
     }
 
     public function getEntities()
     {
         return array(
-            array('Prezent\\Tests\\Fixture\\Basic', 'Prezent\\Tests\\Fixture\\BasicTranslation'),
-            array('Prezent\\Tests\\Fixture\\Mapped', 'Prezent\\Tests\\Fixture\\MappedTranslation'),
+            array('Prezent\\Tests\\Fixture\\Basic',     'Prezent\\Tests\\Fixture\\BasicTranslation'),
+            array('Prezent\\Tests\\Fixture\\Mapped',    'Prezent\\Tests\\Fixture\\MappedTranslation'),
             array('Prezent\\Tests\\Fixture\\Inherited', 'Prezent\\Tests\\Fixture\\InheritedTranslation'),
+            array('Prezent\\Tests\\Fixture\\Mixin',     'Prezent\\Tests\\Fixture\\MixinTranslation'),
         );
     }
 

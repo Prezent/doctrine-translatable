@@ -12,12 +12,8 @@ namespace Prezent\Doctrine\Translatable\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Prezent\Doctrine\Translatable\Annotation as Prezent;
 use Prezent\Doctrine\Translatable\TranslatableInterface;
-use Prezent\Doctrine\Translatable\TranslationInterface;
 
-/**
- * @ORM\MappedSuperclass
- */
-abstract class AbstractTranslation implements TranslationInterface
+trait TranslationTrait
 {
     /**
      * @ORM\Id

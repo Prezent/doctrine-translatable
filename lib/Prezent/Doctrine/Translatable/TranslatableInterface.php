@@ -12,7 +12,7 @@ namespace Prezent\Doctrine\Translatable;
 /**
  * Interface for translatable entities
  */
-interface Translatable
+interface TranslatableInterface
 {
     /**
      * Get all translations
@@ -24,16 +24,16 @@ interface Translatable
     /**
      * Add a new translation
      *
-     * @param Translation $translation
+     * @param TranslationInterface $translation
      * @return self
      */
-    public function addTranslation(Translation $translation);
+    public function addTranslation(TranslationInterface $translation);
 
     /**
      * Remove a translation
      *
-     * @param Translation $translation
+     * @param TranslationInterface $translation
      * @return self
      */
-    public function removeTranslation(Translation $translation);
+    public function removeTranslation(TranslationInterface $translation);
 }

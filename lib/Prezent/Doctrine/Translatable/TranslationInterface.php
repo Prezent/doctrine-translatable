@@ -12,22 +12,22 @@ namespace Prezent\Doctrine\Translatable;
 /**
  * Interface for translation entities
  */
-interface Translation
+interface TranslationInterface
 {
     /**
      * Get the translatable object
      *
-     * @return Translatable
+     * @return TranslatableInterface
      */
     public function getTranslatable();
 
     /**
      * Set the translatable object
      *
-     * @param Translatable $translatable
+     * @param TranslatableInterface $translatable
      * @return self
      */
-    public function setTranslatable(Translatable $translatable);
+    public function setTranslatable(TranslatableInterface $translatable = null);
 
     /**
      * Get the locale

@@ -22,8 +22,8 @@ use Metadata\Driver\DriverChain;
 use Metadata\MetadataFactory;
 use Prezent\Doctrine\Translatable\Mapping\TranslatableMetadata;
 use Prezent\Doctrine\Translatable\Mapping\TranslationMetadata;
-use Prezent\Doctrine\Translatable\Translatable;
-use Prezent\Doctrine\Translatable\Translation;
+use Prezent\Doctrine\Translatable\TranslatableInterface;
+use Prezent\Doctrine\Translatable\TranslationInterface;
 
 /**
  * Load translations on demand
@@ -169,11 +169,11 @@ class TranslatableListener implements EventSubscriber
             return;
         }
 
-        if ($reflClass->implementsInterface('Prezent\Doctrine\Translatable\Translatable')) {
+        if ($reflClass->implementsInterface('Prezent\Doctrine\Translatable\TranslatableInterface')) {
             $this->mapTranslatable($classMetadata);
         }
 
-        if ($reflClass->implementsInterface('Prezent\Doctrine\Translatable\Translation')) {
+        if ($reflClass->implementsInterface('Prezent\Doctrine\Translatable\TranslationInterface')) {
             $this->mapTranslation($classMetadata);
         }
     }

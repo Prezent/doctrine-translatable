@@ -1,62 +1,48 @@
 <?php
 
-namespace Prezent\Tests\Fixture;
+/*
+ * (c) Prezent Internet B.V. <info@prezent.nl>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-use Doctrine\Common\Collections\ArrayCollection;
+namespace Prezent\Doctrine\Translatable\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
 use Prezent\Doctrine\Translatable\Annotation as Prezent;
-use Prezent\Doctrine\Translatable\TranslatableInterface;
 use Prezent\Doctrine\Translatable\TranslationInterface;
 
-/**
- * @ORM\Entity
- */
-class Mapped implements TranslatableInterface
+trait TranslatableTrait
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(name="id", type="integer")
      */
-    private $id;
+    protected $id;
 
     /**
-     * @Prezent\CurrentTranslation
-     * @Prezent\FallbackTranslation
+     * Mapping provided by implementation
      */
-    private $currentTranslation;
+    protected $translations;
 
     /**
-     * @Prezent\Translations(targetEntity="Prezent\Tests\Fixture\MappedTranslation")
+     * Get the translations
+     *
+     * @return ArrayCollection
      */
-    private $translations;
-
-    public function __construct()
-    {
-        $this->translations = new ArrayCollection();
-    }
-
-    public function getName()
-    {
-        return $this->currentTranslation->getName();
-    }
-    
-    public function setName($name)
-    {
-        $this->currentTranslation->setName($name);
-        return $this;
-    }
-
-    public function getCurrentTranslation()
-    {
-        return $this->currentTranslation;
-    }
-
     public function getTranslations()
     {
         return $this->translations;
     }
     
+    /**
+     * Add a translation
+     *
+     * @param TranslationInterface $translation
+     * @return self
+     */
     public function addTranslation(TranslationInterface $translation)
     {
         if (!$this->translations->contains($translation)) {
@@ -67,6 +53,12 @@ class Mapped implements TranslatableInterface
         return $this;
     }
     
+    /**
+     * Remove a translation
+     *
+     * @param TranslationInterface $translation
+     * @return self
+     */
     public function removeTranslation(TranslationInterface $translation)
     {
         if ($this->translations->removeElement($translation)) {

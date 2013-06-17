@@ -11,13 +11,13 @@ namespace Prezent\Doctrine\Translatable\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Prezent\Doctrine\Translatable\Annotation as Prezent;
-use Prezent\Doctrine\Translatable\Translatable;
-use Prezent\Doctrine\Translatable\Translation;
+use Prezent\Doctrine\Translatable\TranslatableInterface;
+use Prezent\Doctrine\Translatable\TranslationInterface;
 
 /**
  * @ORM\MappedSuperclass
  */
-abstract class AbstractTranslatable implements Translatable
+abstract class AbstractTranslatable implements TranslatableInterface
 {
     /**
      * @ORM\Id
@@ -44,10 +44,10 @@ abstract class AbstractTranslatable implements Translatable
     /**
      * Add a translation
      *
-     * @param Translation $translation
+     * @param TranslationInterface $translation
      * @return self
      */
-    public function addTranslation(Translation $translation)
+    public function addTranslation(TranslationInterface $translation)
     {
         if (!$this->translations->contains($translation)) {
             $this->translations[] = $translation;
@@ -60,10 +60,10 @@ abstract class AbstractTranslatable implements Translatable
     /**
      * Remove a translation
      *
-     * @param Translation $translation
+     * @param TranslationInterface $translation
      * @return self
      */
-    public function removeTranslation(Translation $translation)
+    public function removeTranslation(TranslationInterface $translation)
     {
         if ($this->translations->removeElement($translation)) {
             $translation->setTranslatable(null);

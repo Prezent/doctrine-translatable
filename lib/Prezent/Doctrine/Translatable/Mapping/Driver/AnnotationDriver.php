@@ -45,11 +45,11 @@ class AnnotationDriver implements DriverInterface
      */
     public function loadMetadataForClass(\ReflectionClass $class)
     {
-        if ($class->implementsInterface('Prezent\\Doctrine\\Translatable\\Translatable')) {
+        if ($class->implementsInterface('Prezent\\Doctrine\\Translatable\\TranslatableInterface')) {
             return $this->loadTranslatableMetadata($class);
         }
 
-        if ($class->implementsInterface('Prezent\\Doctrine\\Translatable\\Translation')) {
+        if ($class->implementsInterface('Prezent\\Doctrine\\Translatable\\TranslationInterface')) {
             return $this->loadTranslationMetadata($class);
         }
     }

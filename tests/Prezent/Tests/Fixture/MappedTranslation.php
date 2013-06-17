@@ -4,13 +4,13 @@ namespace Prezent\Tests\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 use Prezent\Doctrine\Translatable\Annotation as Prezent;
-use Prezent\Doctrine\Translatable\Translatable;
-use Prezent\Doctrine\Translatable\Translation;
+use Prezent\Doctrine\Translatable\TranslatableInterface;
+use Prezent\Doctrine\Translatable\TranslationInterface;
 
 /**
  * @ORM\Entity
  */
-class MappedTranslation implements Translation
+class MappedTranslation implements TranslationInterface
 {
     /**
      * @ORM\Id
@@ -44,7 +44,7 @@ class MappedTranslation implements Translation
         return $this->translatable;
     }
     
-    public function setTranslatable(Translatable $translatable = null)
+    public function setTranslatable(TranslatableInterface $translatable = null)
     {
         if ($this->translatable == $translatable) {
             return $this;

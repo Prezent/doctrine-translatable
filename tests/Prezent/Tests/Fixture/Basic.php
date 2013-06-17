@@ -5,13 +5,13 @@ namespace Prezent\Tests\Fixture;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Prezent\Doctrine\Translatable\Annotation as Prezent;
-use Prezent\Doctrine\Translatable\Translatable;
-use Prezent\Doctrine\Translatable\Translation;
+use Prezent\Doctrine\Translatable\TranslatableInterface;
+use Prezent\Doctrine\Translatable\TranslationInterface;
 
 /**
  * @ORM\Entity
  */
-class Basic implements Translatable
+class Basic implements TranslatableInterface
 {
     /**
      * @ORM\Id
@@ -63,7 +63,7 @@ class Basic implements Translatable
         return $this->translations;
     }
     
-    public function addTranslation(Translation $translation)
+    public function addTranslation(TranslationInterface $translation)
     {
         if (!$this->translations->contains($translation)) {
             $this->translations[] = $translation;
@@ -73,7 +73,7 @@ class Basic implements Translatable
         return $this;
     }
     
-    public function removeTranslation(Translation $translation)
+    public function removeTranslation(TranslationInterface $translation)
     {
         if ($this->translations->removeElement($translation)) {
             $translation->setTranslatable(null);
