@@ -23,11 +23,6 @@ trait TranslationTrait
     protected $id;
 
     /**
-     * Mapping provided by implementation
-     */
-    protected $translatable;
-
-    /**
      * @ORM\Column(name="locale", type="string")
      * @Prezent\Locale
      */

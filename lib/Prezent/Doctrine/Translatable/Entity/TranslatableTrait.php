@@ -23,11 +23,6 @@ trait TranslatableTrait
     protected $id;
 
     /**
-     * Mapping provided by implementation
-     */
-    protected $translations;
-
-    /**
      * Get the translations
      *
      * @return ArrayCollection
