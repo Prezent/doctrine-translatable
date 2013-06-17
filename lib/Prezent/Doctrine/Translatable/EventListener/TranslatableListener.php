@@ -313,11 +313,14 @@ class TranslatableListener implements EventSubscriber
      * Get the translations query
      *
      * @param EntityManager $em
+     * @param TranslatableMetadata $metadata
      * @return Query
      */
-    private function getQuery(EntityManager $em, $metadata)
+    private function getQuery(EntityManager $em, TranslatableMetadata $metadata)
     {
-        if (!isset($this->queries[$metadata->name])) {
+        $hash = $this->getQueryHash($metadata);
+
+        if (!isset($this->queries[$hash])) {
             $qb = $em->createQueryBuilder();
             $qb->select('t')
                 ->from($metadata->targetEntity, 't', 't.locale')
@@ -329,9 +332,20 @@ class TranslatableListener implements EventSubscriber
                 $qb->andWhere('t.locale = :locale');
             }
 
-            $this->queries[$metadata->name] = $qb->getQuery();
+            $this->queries[$hash] = $qb->getQuery();
         }
 
-        return $this->queries[$metadata->name];
+        return $this->queries[$hash];
+    }
+
+    /**
+     * Hash a query ID
+     *
+     * @param TranslatableMetadata $metadata
+     * @return string
+     */
+    private function getQueryHash($metadata)
+    {
+        return md5((int) $this->fallbackMode . ':' . $metadata->name);
     }
 }
