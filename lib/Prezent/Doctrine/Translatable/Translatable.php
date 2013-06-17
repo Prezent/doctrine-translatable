@@ -9,8 +9,6 @@
 
 namespace Prezent\Doctrine\Translatable;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 /**
  * Interface for translatable entities
  */
