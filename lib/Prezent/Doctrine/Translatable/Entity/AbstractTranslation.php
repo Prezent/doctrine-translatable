@@ -10,12 +10,14 @@
 namespace Prezent\Doctrine\Translatable\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Prezent\Doctrine\Translatable\Annotation as Prezent;
 use Prezent\Doctrine\Translatable\Translatable;
+use Prezent\Doctrine\Translatable\Translation;
 
 /**
  * @ORM\MappedSuperclass
  */
-abstract class AbstractTranslation
+abstract class AbstractTranslation implements Translation
 {
     /**
      * @ORM\Id
@@ -25,17 +27,18 @@ abstract class AbstractTranslation
     protected $id;
 
     /**
-     * Mapping must be supplied by the implementation class
+     * Mapping provided by implementation
      */
-    protected $object;
+    protected $translatable;
 
     /**
      * @ORM\Column(name="locale", type="string")
+     * @Prezent\Locale
      */
     protected $locale;
 
     /**
-     * Getter for id
+     * Get the ID
      *
      * @return int
      */
@@ -45,36 +48,36 @@ abstract class AbstractTranslation
     }
 
     /**
-     * Get the object
+     * Get the translatable object
      *
      * @return Translatable
      */
-    public function getObject()
+    public function getTranslatable()
     {
-        return $this->object;
+        return $this->translatable;
     }
     
     /**
-     * Set the object
+     * Set the translatable object
      *
-     * @param Translatable $object
+     * @param Translatable $translatable
      * @return self
      */
-    public function setObject(Translatable $object = null)
+    public function setTranslatable(Translatable $translatable = null)
     {
-        if ($this->object == $object) {
+        if ($this->translatable == $translatable) {
             return $this;
         }
     
-        $old = $this->object;
-        $this->object = $object;
+        $old = $this->translatable;
+        $this->translatable = $translatable;
     
         if ($old !== null) {
             $old->removeTranslation($this);
         }
     
-        if ($object !== null) {
-            $object->addTranslation($this);
+        if ($translatable !== null) {
+            $translatable->addTranslation($this);
         }
     
         return $this;

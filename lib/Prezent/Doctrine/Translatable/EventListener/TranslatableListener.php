@@ -16,9 +16,13 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;
 use Metadata\Driver\DriverChain;
 use Metadata\MetadataFactory;
+use Prezent\Doctrine\Translatable\Mapping\TranslatableMetadata;
+use Prezent\Doctrine\Translatable\Translatable;
+use Prezent\Doctrine\Translatable\Translation;
 
 /**
  * Load translations on demand
@@ -48,9 +52,9 @@ class TranslatableListener implements EventSubscriber
     private $metadataFactory;
 
     /**
-     * @var Query
+     * @var array
      */
-    private $query;
+    private $queries = array();
 
     /**
      * Constructor
@@ -144,37 +148,113 @@ class TranslatableListener implements EventSubscriber
     public function getSubscribedEvents()
     {
         return array(
+            Events::loadClassMetadata,
             Events::postLoad,
         );
     }
 
     /**
-     * {@inheritdoc}
+     * Add mapping to translatable entities
+     *
+     * @param LoadClassMetadataEventArgs $eventArgs
+     * @return void
+     */
+    public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs)
+    {
+        $classMetadata = $eventArgs->getClassMetadata();
+        $reflClass = $classMetadata->reflClass;
+
+        if (!$reflClass || $reflClass->isAbstract()) {
+            return;
+        }
+
+        if ($reflClass->implementsInterface('Prezent\Doctrine\Translatable\Translatable')) {
+            $this->mapTranslatable($classMetadata);
+        }
+
+        if ($reflClass->implementsInterface('Prezent\Doctrine\Translatable\Translation')) {
+            $this->mapTranslation($classMetadata);
+        }
+    }
+
+    /**
+     * Add mapping data to a translatable entity
+     *
+     * @param ClassMetadata $mapping
+     * @return void
+     */
+    private function mapTranslatable(ClassMetadata $mapping)
+    {
+        $metadata = $this->metadataFactory->getMetadataForClass($mapping->name);
+        if (!$mapping->hasAssociation($metadata->translations->name)) {
+            $targetMetadata = $this->metadataFactory->getMetadataForClass($metadata->targetEntity);
+
+            $mapping->mapOneToMany(array(
+                'fieldName'     => $metadata->translations->name,
+                'targetEntity'  => $metadata->targetEntity,
+                'mappedBy'      => $targetMetadata->translatable->name,
+                'indexBy'       => 'locale',
+                'cascade'       => array('persist', 'merge', 'remove'),
+                'orphanRemoval' => true,
+            ));
+        }
+    }
+
+    /**
+     * Add mapping data to a translation entity
+     *
+     * @param ClassMetadata $mapping
+     * @return void
+     */
+    private function mapTranslation(ClassMetadata $mapping)
+    {
+        $metadata = $this->metadataFactory->getMetadataForClass($mapping->name);
+        if (!$mapping->hasAssociation($metadata->translatable->name)) {
+            $targetMetadata = $this->metadataFactory->getMetadataForClass($metadata->targetEntity);
+
+            $mapping->mapManyToOne(array(
+                'fieldName'    => $metadata->translatable->name,
+                'targetEntity' => $metadata->targetEntity,
+                'inversedBy'   => $targetMetadata->translations->name,
+                'joinColumns'  => array(array(
+                    'name'                 => 'translatable_id',
+                    'referencedColumnName' => 'id',
+                    'onDelete'             => 'CASCADE',
+                )),
+            ));
+        }
+    }
+
+    /**
+     * Load translations
+     *
+     * @param LifecycleEventArgs $args
+     * @return void
      */
     public function postLoad(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
         $metadata = $this->metadataFactory->getMetadataForClass(get_class($entity));
 
-        if ($metadata->isTranslatable()) {
+        if ($metadata instanceof TranslatableMetadata) {
 
             $locale = $this->fallbackMode
                 ? array($this->currentLocale, $this->fallbackLocale)
                 : $this->currentLocale;
 
             $translations = $this->getQuery($args->getEntityManager(), $metadata)
-                ->setParameter('object', $entity)
+                ->setParameter('translatable', $entity)
                 ->setParameter('locale', $locale, is_array($locale) ? Connection::PARAM_STR_ARRAY : null)
                 ->getResult();
 
             // Set current translation
             if (isset($translations[$this->currentLocale])) {
-                $metadata->currentTranslationProperty->setValue($entity, $translations[$this->currentLocale]);
+                $metadata->currentTranslation->setValue($entity, $translations[$this->currentLocale]);
             }
 
             // Set fallback translation
-            if ($this->fallbackMode && isset($translations[$this->fallbackLocale]) && !$metadata->fallbackTranslationProperty->getValue($entity)) {
-                $metadata->fallbackTranslationProperty->setValue($entity, $translations[$this->fallbackLocale]);
+            if ($this->fallbackMode && isset($translations[$this->fallbackLocale]) && !$metadata->fallbackTranslation->getValue($entity)) {
+                $metadata->fallbackTranslation->setValue($entity, $translations[$this->fallbackLocale]);
             }
         }
     }
@@ -187,11 +267,11 @@ class TranslatableListener implements EventSubscriber
      */
     private function getQuery(EntityManager $em, $metadata)
     {
-        if (!$this->query) {
+        if (!isset($this->queries[$metadata->name])) {
             $qb = $em->createQueryBuilder();
             $qb->select('t')
-                ->from($metadata->translationEntityClass, 't', 't.locale')
-                ->where('t.object = :object');
+                ->from($metadata->targetEntity, 't', 't.locale')
+                ->where('t.translatable = :translatable');
 
             if ($this->fallbackMode) {
                 $qb->andWhere('t.locale IN (:locale)');
@@ -199,9 +279,9 @@ class TranslatableListener implements EventSubscriber
                 $qb->andWhere('t.locale = :locale');
             }
 
-            $this->query = $qb->getQuery();
+            $this->queries[$metadata->name] = $qb->getQuery();
         }
 
-        return $this->query;
+        return $this->queries[$metadata->name];
     }
 }

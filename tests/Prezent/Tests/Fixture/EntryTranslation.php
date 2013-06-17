@@ -8,18 +8,14 @@ use Prezent\Doctrine\Translatable\Entity\AbstractTranslation;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="entry_translation",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="translation_unique", columns={"object_id", "locale"})},
- *     indexes={@ORM\Index(name="locale_idx", columns={"locale"})}
- * )
+ * @ORM\Table(name="entry_translation")
  */
 class EntryTranslation extends AbstractTranslation
 {
     /**
-     * @ORM\ManyToOne(targetEntity="Prezent\Tests\Fixture\Entry", inversedBy="translations")
-     * @ORM\JoinColumn(name="object_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
+     * @Prezent\Translatable(targetEntity="Prezent\Tests\Fixture\Entry")
      */
-    protected $object;
+    protected $translatable;
 
     /**
      * @ORM\Column(name="name", type="string")

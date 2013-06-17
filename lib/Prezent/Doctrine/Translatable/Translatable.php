@@ -10,7 +10,6 @@
 namespace Prezent\Doctrine\Translatable;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Prezent\Doctrine\Translatable\Entity\AbstractTranslation;
 
 /**
  * Interface for translatable entities
@@ -27,16 +26,16 @@ interface Translatable
     /**
      * Add a new translation
      *
-     * @param AbstractTranslation $translation
+     * @param Translation $translation
      * @return self
      */
-    public function addTranslation(AbstractTranslation $translation);
+    public function addTranslation(Translation $translation);
 
     /**
      * Remove a translation
      *
-     * @param AbstractTranslation $translation
+     * @param Translation $translation
      * @return self
      */
-    public function removeTranslation(AbstractTranslation $translation);
+    public function removeTranslation(Translation $translation);
 }

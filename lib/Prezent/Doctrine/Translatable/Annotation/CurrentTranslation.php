@@ -16,7 +16,8 @@ namespace Prezent\Doctrine\Translatable\Annotation;
  * must be loaded.
  *
  * @Annotation
+ * @Target("PROPERTY")
  */
-class CurrentTranslation extends Annotation
+class CurrentTranslation
 {
 }

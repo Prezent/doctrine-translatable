@@ -15,7 +15,13 @@ namespace Prezent\Doctrine\Translatable\Annotation;
  * This annotation indicates the one-to-many relation to the translations.
  *
  * @Annotation
+ * @Target("PROPERTY")
  */
-class Translations extends Annotation
+class Translations
 {
+    /**
+     * @var string
+     * @Required
+     */
+    public $targetEntity;
 }

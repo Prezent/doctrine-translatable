@@ -10,14 +10,18 @@
 namespace Prezent\Doctrine\Translatable\Annotation;
 
 /**
- * CurrentTranslation annotation
+ * Translatable annotation
  *
- * This annotation indicates the property where the current translation object
- * must be loaded.
+ * This annotation indicates the many-to-one relation to the translatable.
  *
  * @Annotation
  * @Target("PROPERTY")
  */
-class FallbackTranslation
+class Translatable
 {
+    /**
+     * @var string
+     * @Required
+     */
+    public $targetEntity;
 }

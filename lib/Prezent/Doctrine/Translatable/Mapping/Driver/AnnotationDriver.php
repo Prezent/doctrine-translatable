@@ -15,8 +15,9 @@ use Metadata\Driver\DriverInterface;
 use Prezent\Doctrine\Translatable\Annotation\CurrentTranslation;
 use Prezent\Doctrine\Translatable\Annotation\FallbackTranslation;
 use Prezent\Doctrine\Translatable\Annotation\Translations;
-use Prezent\Doctrine\Translatable\Mapping\ClassMetadata;
 use Prezent\Doctrine\Translatable\Mapping\PropertyMetadata;
+use Prezent\Doctrine\Translatable\Mapping\TranslatableMetadata;
+use Prezent\Doctrine\Translatable\Mapping\TranslationMetadata;
 
 /**
  * Load translation metadata from annotations
@@ -44,8 +45,23 @@ class AnnotationDriver implements DriverInterface
      */
     public function loadMetadataForClass(\ReflectionClass $class)
     {
-        $classMetadata = new ClassMetadata($class->name);
-        $propertiesMetadata = $propertiesAnnotations = array();
+        if ($class->implementsInterface('Prezent\\Doctrine\\Translatable\\Translatable')) {
+            return $this->loadTranslatableMetadata($class);
+        }
+
+        if ($class->implementsInterface('Prezent\\Doctrine\\Translatable\\Translation')) {
+            return $this->loadTranslationMetadata($class);
+        }
+    }
+
+    /**
+     * Load metadata for a translatable class
+     *
+     * @param \ReflectionClass $class
+     * @return TranslatableMetadata
+     */
+    private function loadTranslatableMetadata(\ReflectionClass $class) {
+        $classMetadata = new TranslatableMetadata($class->name);
 
         foreach ($class->getProperties() as $property) {
             if ($property->class !== $class->name) {
@@ -55,25 +71,52 @@ class AnnotationDriver implements DriverInterface
             $propertyMetadata = new PropertyMetadata($class->name, $property->getName());
 
             if ($this->reader->getPropertyAnnotation($property, 'Prezent\\Doctrine\\Translatable\\Annotation\\CurrentTranslation')) {
-                $classMetadata->currentTranslationProperty = $propertyMetadata;
+                $classMetadata->currentTranslation = $propertyMetadata;
                 $classMetadata->addPropertyMetadata($propertyMetadata);
             }
             
             if ($this->reader->getPropertyAnnotation($property, 'Prezent\\Doctrine\\Translatable\\Annotation\\FallbackTranslation')) {
-                $classMetadata->fallbackTranslationProperty = $propertyMetadata;
+                $classMetadata->fallbackTranslation = $propertyMetadata;
                 $classMetadata->addPropertyMetadata($propertyMetadata);
             }
             
-            if ($this->reader->getPropertyAnnotation($property, 'Prezent\\Doctrine\\Translatable\\Annotation\\Translations')) {
-                if (!($oneToMany = $this->reader->getPropertyAnnotation($property, 'Doctrine\\ORM\\Mapping\\OneToMany'))) {
-                    throw new \UnexpectedValueException('The Translations annotation can only be set on a oneToMany relationship');
-                }
-
-                $classMetadata->translationsProperty = $propertyMetadata;
+            if ($annot = $this->reader->getPropertyAnnotation($property, 'Prezent\\Doctrine\\Translatable\\Annotation\\Translations')) {
+                $classMetadata->targetEntity = $annot->targetEntity;
+                $classMetadata->translations = $propertyMetadata;
                 $classMetadata->addPropertyMetadata($propertyMetadata);
-                $classMetadata->translationEntityClass = $oneToMany->targetEntity;
+            }
+        }
+
+        return $classMetadata;
+    }
+
+    /**
+     * Load metadata for a translation class
+     *
+     * @param \ReflectionClass $class
+     * @return TranslationMetadata
+     */
+    private function loadTranslationMetadata(\ReflectionClass $class)
+    {
+        $classMetadata = new TranslationMetadata($class->name);
+
+        foreach ($class->getProperties() as $property) {
+            if ($property->class !== $class->name) {
+                continue;
             }
 
+            $propertyMetadata = new PropertyMetadata($class->name, $property->getName());
+
+            if ($annot = $this->reader->getPropertyAnnotation($property, 'Prezent\\Doctrine\\Translatable\\Annotation\\Translatable')) {
+                $classMetadata->targetEntity = $annot->targetEntity;
+                $classMetadata->translatable = $propertyMetadata;
+                $classMetadata->addPropertyMetadata($propertyMetadata);
+            }
+
+            if ($this->reader->getPropertyAnnotation($property, 'Prezent\\Doctrine\\Translatable\\Annotation\\Locale')) {
+                $classMetadata->locale = $propertyMetadata;
+                $classMetadata->addPropertyMetadata($propertyMetadata);
+            }
         }
 
         return $classMetadata;
