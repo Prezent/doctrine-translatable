@@ -21,6 +21,7 @@ use Doctrine\ORM\Query;
 use Metadata\Driver\DriverChain;
 use Metadata\MetadataFactory;
 use Prezent\Doctrine\Translatable\Mapping\TranslatableMetadata;
+use Prezent\Doctrine\Translatable\Mapping\TranslationMetadata;
 use Prezent\Doctrine\Translatable\Translatable;
 use Prezent\Doctrine\Translatable\Translation;
 
@@ -209,6 +210,8 @@ class TranslatableListener implements EventSubscriber
     private function mapTranslation(ClassMetadata $mapping)
     {
         $metadata = $this->metadataFactory->getMetadataForClass($mapping->name);
+
+        // Map translatable relation
         if (!$mapping->hasAssociation($metadata->translatable->name)) {
             $targetMetadata = $this->metadataFactory->getMetadataForClass($metadata->targetEntity);
 
@@ -224,12 +227,52 @@ class TranslatableListener implements EventSubscriber
             ));
         }
 
+        // Map locale field
         if (!$mapping->hasField($metadata->locale->name)) {
             $mapping->mapField(array(
                 'fieldName' => $metadata->locale->name,
                 'type' => 'string',
             ));
         }
+
+        // Map unique index
+        $columns = array(
+            $mapping->getSingleAssociationJoinColumnName($metadata->translatable->name),
+            $metadata->locale->name,
+        );
+
+        if (!$this->hasUniqueConstraint($mapping, $columns)) {
+            $constraints = isset($mapping->table['uniqueConstraints']) ? $mapping->table['UniqueConstraints']: array();
+            $constraints[$mapping->getTableName() . '_uniq_trans'] = array(
+                'columns' => $columns,
+            );
+
+            $mapping->setPrimaryTable(array(
+                'uniqueConstraints' => $constraints,
+            ));
+        }
+    }
+
+    /**
+     * Check if an unique constraint has been defined
+     *
+     * @param ClassMetadata $mapping
+     * @param array $columns
+     * @return bool
+     */
+    private function hasUniqueConstraint(ClassMetadata $mapping, array $columns)
+    {
+        if (!isset($mapping->table['uniqueConstraints'])) {
+            return false;
+        }
+
+        foreach ($mapping->table['uniqueConstraints'] as $constraint) {
+            if (!array_diff($constraint['columns'], $columns)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

@@ -9,6 +9,9 @@ use Prezent\Doctrine\Translatable\Translation;
 
 /**
  * @ORM\Entity
+ * @ORM\Table(
+ *     uniqueConstraints={@ORM\UniqueConstraint(columns={"translatable_id", "locale"})}
+ * )
  */
 class BasicTranslation implements Translation
 {
