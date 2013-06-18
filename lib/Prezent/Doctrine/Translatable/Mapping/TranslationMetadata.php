@@ -35,6 +35,26 @@ class TranslationMetadata extends MergeableClassMetadata
     public $locale;
 
     /**
+     * Validate the metadata
+     *
+     * @return void
+     */
+    public function validate()
+    {
+        if (!$this->translatable) {
+            throw new MappingException(sprintf('No translatable specified for %s', $this->name));
+        }
+
+        if (!$this->targetEntity) {
+            throw new MappingException(sprintf('No translatable targetEntity specified for %s', $this->name));
+        }
+
+        if (!$this->locale) {
+            throw new MappingException(sprintf('No locale specified for %s', $this->name));
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function merge(MergeableInterface $object)

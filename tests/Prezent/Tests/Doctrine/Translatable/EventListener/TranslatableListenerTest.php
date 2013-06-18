@@ -2,8 +2,6 @@
 
 namespace Prezent\Tests\Doctrine\Translatable\Mapping;
 
-use Prezent\Tests\Fixture\Basic;
-use Prezent\Tests\Fixture\BasicTranslation;
 use Prezent\Tests\Tool\ORMTestCase;
 
 class TranslatableListenerTest extends ORMTestCase

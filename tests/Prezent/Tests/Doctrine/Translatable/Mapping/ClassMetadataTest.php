@@ -47,4 +47,22 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($meta, $copy);
         $this->assertSame($meta->locale, $meta->propertyMetadata['locale']);
     }
+
+    /**
+     * @expectedException Prezent\Doctrine\Translatable\Mapping\MappingException
+     */
+    public function testTranslatableValidation()
+    {
+        $meta = new TranslatableMetadata('Prezent\\Tests\\Fixture\\Basic');
+        $meta->validate();
+    }
+
+    /**
+     * @expectedException Prezent\Doctrine\Translatable\Mapping\MappingException
+     */
+    public function testTranslationValidation()
+    {
+        $meta = new TranslationMetadata('Prezent\\Tests\\Fixture\\BasicTranslation');
+        $meta->validate();
+    }
 }

@@ -40,6 +40,22 @@ class TranslatableMetadata extends MergeableClassMetadata
     public $translations;
 
     /**
+     * Validate the metadata
+     *
+     * @return void
+     */
+    public function validate()
+    {
+        if (!$this->translations) {
+            throw new MappingException(sprintf('No translations specified for %s', $this->name));
+        }
+
+        if (!$this->targetEntity) {
+            throw new MappingException(sprintf('No translations targetEntity specified for %s', $this->name));
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function merge(MergeableInterface $object)

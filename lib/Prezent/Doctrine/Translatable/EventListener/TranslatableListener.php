@@ -186,9 +186,9 @@ class TranslatableListener implements EventSubscriber
      */
     private function mapTranslatable(ClassMetadata $mapping)
     {
-        $metadata = $this->metadataFactory->getMetadataForClass($mapping->name);
+        $metadata = $this->getTranslatableMetadata($mapping->name);
         if (!$mapping->hasAssociation($metadata->translations->name)) {
-            $targetMetadata = $this->metadataFactory->getMetadataForClass($metadata->targetEntity);
+            $targetMetadata = $this->getTranslatableMetadata($metadata->targetEntity);
 
             $mapping->mapOneToMany(array(
                 'fieldName'     => $metadata->translations->name,
@@ -209,11 +209,11 @@ class TranslatableListener implements EventSubscriber
      */
     private function mapTranslation(ClassMetadata $mapping)
     {
-        $metadata = $this->metadataFactory->getMetadataForClass($mapping->name);
+        $metadata = $this->getTranslatableMetadata($mapping->name);
 
         // Map translatable relation
         if (!$mapping->hasAssociation($metadata->translatable->name)) {
-            $targetMetadata = $this->metadataFactory->getMetadataForClass($metadata->targetEntity);
+            $targetMetadata = $this->getTranslatableMetadata($metadata->targetEntity);
 
             $mapping->mapManyToOne(array(
                 'fieldName'    => $metadata->translatable->name,
@@ -254,6 +254,20 @@ class TranslatableListener implements EventSubscriber
     }
 
     /**
+     * Get translatable metadata
+     *
+     * @param string $className
+     * @return TranslatableMetadata|TranslationMetadata
+     */
+    private function getTranslatableMetadata($className)
+    {
+        $metadata = $this->metadataFactory->getMetadataForClass($className);
+        $metadata->validate();
+
+        return $metadata;
+    }
+
+    /**
      * Check if an unique constraint has been defined
      *
      * @param ClassMetadata $mapping
@@ -284,7 +298,7 @@ class TranslatableListener implements EventSubscriber
     public function postLoad(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
-        $metadata = $this->metadataFactory->getMetadataForClass(get_class($entity));
+        $metadata = $this->getTranslatableMetadata(get_class($entity));
 
         if ($metadata instanceof TranslatableMetadata) {
 
