@@ -261,8 +261,9 @@ class TranslatableListener implements EventSubscriber
      */
     private function getTranslatableMetadata($className)
     {
-        $metadata = $this->metadataFactory->getMetadataForClass($className);
-        $metadata->validate();
+        if ($metadata = $this->metadataFactory->getMetadataForClass($className)) {
+            $metadata->validate();
+        }
 
         return $metadata;
     }
