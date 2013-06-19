@@ -13,6 +13,13 @@ use Prezent\Doctrine\Translatable\Entity\AbstractTranslatable;
 class Inherited extends AbstractTranslatable
 {
     /**
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\Column(name="id", type="integer")
+     */
+    protected $id;
+
+    /**
      * @Prezent\Translations(targetEntity="Prezent\Tests\Fixture\InheritedTranslation")
      */
     protected $translations;

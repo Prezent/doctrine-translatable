@@ -20,9 +20,7 @@ use Prezent\Doctrine\Translatable\TranslationInterface;
 abstract class AbstractTranslatable implements TranslatableInterface
 {
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(name="id", type="integer")
+     * Mapping provided by implementation
      */
     protected $id;
 
