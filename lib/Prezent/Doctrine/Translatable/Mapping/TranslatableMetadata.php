@@ -27,12 +27,12 @@ class TranslatableMetadata extends MergeableClassMetadata
     /**
      * @var PropertyMetadata
      */
-    public $currentTranslation;
+    public $currentLocale;
 
     /**
      * @var PropertyMetadata
      */
-    public $fallbackTranslation;
+    public $fallbackLocale;
 
     /**
      * @var PropertyMetadata
@@ -70,12 +70,12 @@ class TranslatableMetadata extends MergeableClassMetadata
             $this->targetEntity = $object->targetEntity;
         }
 
-        if ($object->currentTranslation) {
-            $this->currentTranslation = $object->currentTranslation;
+        if ($object->currentLocale) {
+            $this->currentLocale = $object->currentLocale;
         }
 
-        if ($object->fallbackTranslation) {
-            $this->fallbackTranslation = $object->fallbackTranslation;
+        if ($object->fallbackLocale) {
+            $this->fallbackLocale = $object->fallbackLocale;
         }
 
         if ($object->translations) {
@@ -90,9 +90,9 @@ class TranslatableMetadata extends MergeableClassMetadata
     {
         return serialize(array(
             $this->targetEntity,
-            $this->currentTranslation  ? $this->currentTranslation->name  : null,
-            $this->fallbackTranslation ? $this->fallbackTranslation->name : null,
-            $this->translations        ? $this->translations->name        : null,
+            $this->currentLocale  ? $this->currentLocale->name  : null,
+            $this->fallbackLocale ? $this->fallbackLocale->name : null,
+            $this->translations   ? $this->translations->name        : null,
             parent::serialize(),
         ));
     }
@@ -104,19 +104,19 @@ class TranslatableMetadata extends MergeableClassMetadata
     {
         list (
             $this->targetEntity,
-            $currentTranslation,
-            $fallbackTranslation,
+            $currentLocale,
+            $fallbackLocale,
             $translations,
             $parent
         ) = unserialize($str);
 
         parent::unserialize($parent);
 
-        if ($currentTranslation) {
-            $this->currentTranslation = $this->propertyMetadata[$currentTranslation];
+        if ($currentLocale) {
+            $this->currentLocale = $this->propertyMetadata[$currentLocale];
         }
-        if ($fallbackTranslation) {
-            $this->fallbackTranslation = $this->propertyMetadata[$fallbackTranslation];
+        if ($fallbackLocale) {
+            $this->fallbackLocale = $this->propertyMetadata[$fallbackLocale];
         }
         if ($translations) {
             $this->translations = $this->propertyMetadata[$translations];

@@ -25,10 +25,14 @@ class Inherited extends AbstractTranslatable
     protected $translations;
 
     /**
-     * @Prezent\CurrentTranslation
-     * @Prezent\FallbackTranslation
+     * @Prezent\CurrentLocale
      */
-    private $currentTranslation;
+    public $currentLocale;
+
+    /**
+     * @Prezent\FallbackLocale
+     */
+    public $fallbackLocale;
 
     /**
      * Constructor
@@ -36,21 +40,5 @@ class Inherited extends AbstractTranslatable
     public function __construct()
     {
         $this->translations = new ArrayCollection();
-    }
-
-    public function getName()
-    {
-        return $this->currentTranslation->getName();
-    }
-    
-    public function setName($name)
-    {
-        $this->currentTranslation->setName($name);
-        return $this;
-    }
-
-    public function getCurrentTranslation()
-    {
-        return $this->currentTranslation;
     }
 }

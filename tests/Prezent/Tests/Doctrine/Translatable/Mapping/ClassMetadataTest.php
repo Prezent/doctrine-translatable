@@ -11,22 +11,24 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
 {
     public function testTranslatableSerialization()
     {
-        $currentProp = new PropertyMetadata('Prezent\\Tests\\Fixture\\Basic', 'currentTranslation');
+        $currentProp = new PropertyMetadata('Prezent\\Tests\\Fixture\\Basic', 'currentLocale');
+        $fallbackProp = new PropertyMetadata('Prezent\\Tests\\Fixture\\Basic', 'fallbackLocale');
         $transProp = new PropertyMetadata('Prezent\\Tests\\Fixture\\Basic', 'translations');
 
         $meta = new TranslatableMetadata('Prezent\\Tests\\Fixture\\Basic');
         $meta->targetEntity = 'Prezent\\Tests\\Fixture\\BasicTranslation';
-        $meta->currentTranslation = $currentProp;
-        $meta->fallbackTranslation = $currentProp;
+        $meta->currentLocale = $currentProp;
+        $meta->fallbackLocale = $fallbackProp;
         $meta->translations = $transProp;
         $meta->addPropertyMetadata($currentProp);
+        $meta->addPropertyMetadata($fallbackProp);
         $meta->addPropertyMetadata($transProp);
 
         $string = serialize($meta);
         $copy = unserialize($string);
 
         $this->assertEquals($meta, $copy);
-        $this->assertSame($meta->currentTranslation, $meta->propertyMetadata['currentTranslation']);
+        $this->assertSame($meta->currentLocale, $meta->propertyMetadata['currentLocale']);
     }
 
     public function testTranslationSerialization()

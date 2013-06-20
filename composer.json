@@ -21,7 +21,7 @@
     },
     "require": {
         "php": ">=5.3.2",
-        "doctrine/orm": ">=2.2.3,<2.5-dev",
+        "doctrine/orm": ">=2.2.3,<2.6-dev",
         "jms/metadata": "~1.1"
     },
     "autoload": {

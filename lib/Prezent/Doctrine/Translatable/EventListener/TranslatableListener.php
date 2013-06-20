@@ -17,6 +17,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\Query;
 use Metadata\Driver\DriverChain;
 use Metadata\MetadataFactory;
@@ -33,7 +34,7 @@ use Prezent\Doctrine\Translatable\TranslationInterface;
 class TranslatableListener implements EventSubscriber
 {
     /**
-     * @var string Locale to load translations in
+     * @var string Locale to use for translations
      */
     private $currentLocale = 'en';
 
@@ -41,11 +42,6 @@ class TranslatableListener implements EventSubscriber
      * @var string Locale to use when the current locale is not available
      */
     private $fallbackLocale = 'en';
-
-    /**
-     * @var bool
-     */
-    private $fallbackMode = false;
 
     /**
      * @var MetadataFactory
@@ -112,28 +108,6 @@ class TranslatableListener implements EventSubscriber
     }
 
     /**
-     * Get the current fallback mode
-     *
-     * @return bool True if fallback is enabled, false otherwise
-     */
-    public function getFallbackMode()
-    {
-        return $this->fallbackMode;
-    }
-    
-    /**
-     * Enable/disable fallback mode
-     *
-     * @param bool $fallbackMode
-     * @return self
-     */
-    public function setFallbackMode($fallbackMode = true)
-    {
-        $this->fallbackMode = $fallbackMode;
-        return $this;
-    }
-
-    /**
      * Getter for metadataFactory
      *
      * @return MetadataFactory
@@ -194,6 +168,7 @@ class TranslatableListener implements EventSubscriber
                 'fieldName'     => $metadata->translations->name,
                 'targetEntity'  => $metadata->targetEntity,
                 'mappedBy'      => $targetMetadata->translatable->name,
+                'fetch'         => ClassMetadataInfo::FETCH_EXTRA_LAZY,
                 'indexBy'       => $targetMetadata->locale->name,
                 'cascade'       => array('persist', 'merge', 'remove'),
                 'orphanRemoval' => true,
@@ -303,64 +278,13 @@ class TranslatableListener implements EventSubscriber
 
         if ($metadata instanceof TranslatableMetadata) {
 
-            $locale = $this->fallbackMode
-                ? array($this->currentLocale, $this->fallbackLocale)
-                : $this->currentLocale;
-
-            $translations = $this->getQuery($args->getEntityManager(), $metadata)
-                ->setParameter('translatable', $entity)
-                ->setParameter('locale', $locale, is_array($locale) ? Connection::PARAM_STR_ARRAY : null)
-                ->getResult();
-
-            // Set current translation
-            if (isset($translations[$this->currentLocale])) {
-                $metadata->currentTranslation->setValue($entity, $translations[$this->currentLocale]);
+            if ($metadata->fallbackLocale) {
+                $metadata->fallbackLocale->setValue($entity, $this->fallbackLocale);
             }
 
-            // Set fallback translation
-            if ($this->fallbackMode && isset($translations[$this->fallbackLocale]) && !$metadata->fallbackTranslation->getValue($entity)) {
-                $metadata->fallbackTranslation->setValue($entity, $translations[$this->fallbackLocale]);
+            if ($metadata->currentLocale) {
+                $metadata->currentLocale->setValue($entity, $this->currentLocale);
             }
         }
-    }
-
-    /**
-     * Get the translations query
-     *
-     * @param EntityManager $em
-     * @param TranslatableMetadata $metadata
-     * @return Query
-     */
-    private function getQuery(EntityManager $em, TranslatableMetadata $metadata)
-    {
-        $hash = $this->getQueryHash($metadata);
-
-        if (!isset($this->queries[$hash])) {
-            $qb = $em->createQueryBuilder();
-            $qb->select('t')
-                ->from($metadata->targetEntity, 't', 't.locale')
-                ->where('t.translatable = :translatable');
-
-            if ($this->fallbackMode) {
-                $qb->andWhere('t.locale IN (:locale)');
-            } else {
-                $qb->andWhere('t.locale = :locale');
-            }
-
-            $this->queries[$hash] = $qb->getQuery();
-        }
-
-        return $this->queries[$hash];
-    }
-
-    /**
-     * Hash a query ID
-     *
-     * @param TranslatableMetadata $metadata
-     * @return string
-     */
-    private function getQueryHash($metadata)
-    {
-        return md5((int) $this->fallbackMode . ':' . $metadata->name);
     }
 }

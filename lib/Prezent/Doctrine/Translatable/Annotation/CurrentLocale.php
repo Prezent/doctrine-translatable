@@ -18,6 +18,6 @@ namespace Prezent\Doctrine\Translatable\Annotation;
  * @Annotation
  * @Target("PROPERTY")
  */
-class FallbackTranslation
+class CurrentLocale
 {
 }

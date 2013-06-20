@@ -70,13 +70,13 @@ class AnnotationDriver implements DriverInterface
 
             $propertyMetadata = new PropertyMetadata($class->name, $property->getName());
 
-            if ($this->reader->getPropertyAnnotation($property, 'Prezent\\Doctrine\\Translatable\\Annotation\\CurrentTranslation')) {
-                $classMetadata->currentTranslation = $propertyMetadata;
+            if ($this->reader->getPropertyAnnotation($property, 'Prezent\\Doctrine\\Translatable\\Annotation\\CurrentLocale')) {
+                $classMetadata->currentLocale = $propertyMetadata;
                 $classMetadata->addPropertyMetadata($propertyMetadata);
             }
             
-            if ($this->reader->getPropertyAnnotation($property, 'Prezent\\Doctrine\\Translatable\\Annotation\\FallbackTranslation')) {
-                $classMetadata->fallbackTranslation = $propertyMetadata;
+            if ($this->reader->getPropertyAnnotation($property, 'Prezent\\Doctrine\\Translatable\\Annotation\\FallbackLocale')) {
+                $classMetadata->fallbackLocale = $propertyMetadata;
                 $classMetadata->addPropertyMetadata($propertyMetadata);
             }
             

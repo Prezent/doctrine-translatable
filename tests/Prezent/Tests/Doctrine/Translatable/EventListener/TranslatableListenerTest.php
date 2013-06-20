@@ -38,7 +38,7 @@ class TranslatableListenerTest extends ORMTestCase
     /**
      * @dataProvider getEntities
      */
-    public function testCurrentLocale($version, $translatableClass, $translationClass)
+    public function testPostLoad($version, $translatableClass, $translationClass)
     {
         if (version_compare(PHP_VERSION, $version) < 0) {
             $this->markTestSkipped('Traits require PHP 5.4');
@@ -47,14 +47,20 @@ class TranslatableListenerTest extends ORMTestCase
         // setup
         $em = $this->getEntityManager();
         $listener = $this->getTranslatableListener();
-        $listener->setCurrentLocale('en');
+        $listener->setCurrentLocale('de')
+                 ->setFallbackLocale('en');
 
         $en = new $translationClass();
         $en->setLocale('en')
            ->setName('foo');
 
+        $de = new $translationClass();
+        $de->setLocale('de')
+           ->setName('bar');
+
         $entity = new $translatableClass();
-        $entity->addTranslation($en);
+        $entity->addTranslation($en)
+               ->addTranslation($de);
 
         $em->persist($entity);
         $em->flush();
@@ -64,75 +70,9 @@ class TranslatableListenerTest extends ORMTestCase
         $entity = $em->find($translatableClass, 1);
 
         $this->assertNotNull($entity);
-        $this->assertInstanceOf($translationClass, $entity->getCurrentTranslation());
-        $this->assertEquals('en', $entity->getCurrentTranslation()->getLocale());
-    }
-
-    /**
-     * @dataProvider getEntities
-     */
-    public function testFallbackLocale($version, $translatableClass, $translationClass)
-    {
-        if (version_compare(PHP_VERSION, $version) < 0) {
-            $this->markTestSkipped('Traits require PHP 5.4');
-        }
-
-        // setup
-        $em = $this->getEntityManager();
-        $listener = $this->getTranslatableListener();
-        $listener->setFallbackMode(true)
-            ->setCurrentLocale('de')
-            ->setFallbackLocale('en');
-
-        $en = new $translationClass();
-        $en->setLocale('en')
-           ->setName('foo');
-
-        $entity = new $translatableClass();
-        $entity->addTranslation($en);
-
-        $em->persist($entity);
-        $em->flush();
-        $em->clear();
-        // end setup
-
-        $entity = $em->find($translatableClass, 1);
-
-        $this->assertNotNull($entity);
-        $this->assertInstanceOf($translationClass, $entity->getCurrentTranslation());
-        $this->assertEquals('en', $entity->getCurrentTranslation()->getLocale());
-    }
-
-    /**
-     * @dataProvider getEntities
-     */
-    public function testFallbackOff($version, $translatableClass, $translationClass)
-    {
-        if (version_compare(PHP_VERSION, $version) < 0) {
-            $this->markTestSkipped('Traits require PHP 5.4');
-        }
-
-        // setup
-        $em = $this->getEntityManager();
-        $listener = $this->getTranslatableListener();
-        $listener->setFallbackMode(false)
-            ->setCurrentLocale('de');
-
-        $en = new $translationClass();
-        $en->setLocale('en')
-           ->setName('foo');
-
-        $entity = new $translatableClass();
-        $entity->addTranslation($en);
-
-        $em->persist($entity);
-        $em->flush();
-        $em->clear();
-        // end setup
-
-        $entity = $em->find($translatableClass, 1);
-
-        $this->assertNotNull($entity);
-        $this->assertNull($entity->getCurrentTranslation());
+        $this->assertEquals('de', $entity->currentLocale);
+        $this->assertEquals('de', $entity->getTranslations()->get($entity->currentLocale)->getLocale());
+        $this->assertEquals('en', $entity->fallbackLocale);
+        $this->assertEquals('en', $entity->getTranslations()->get($entity->fallbackLocale)->getLocale());
     }
 }

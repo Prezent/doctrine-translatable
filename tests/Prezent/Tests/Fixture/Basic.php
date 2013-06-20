@@ -21,17 +21,23 @@ class Basic implements TranslatableInterface
     private $id;
 
     /**
-     * @Prezent\CurrentTranslation
-     * @Prezent\FallbackTranslation
+     * @Prezent\CurrentLocale
      */
-    private $currentTranslation;
+    public $currentLocale;
+
+    /**
+     * @Prezent\FallbackLocale
+     */
+    public $fallbackLocale;
 
     /**
      * @ORM\OneToMany(
      *     targetEntity="Prezent\Tests\Fixture\BasicTranslation",
      *     mappedBy="translatable",
      *     cascade={"persist", "remove", "merge"},
-     *     orphanRemoval=true
+     *     orphanRemoval=true,
+     *     indexBy="locale",
+     *     fetch="EXTRA_LAZY"
      * )
      * @Prezent\Translations(targetEntity="Prezent\Tests\Fixture\BasicTranslation")
      */
@@ -40,22 +46,6 @@ class Basic implements TranslatableInterface
     public function __construct()
     {
         $this->translations = new ArrayCollection();
-    }
-
-    public function getName()
-    {
-        return $this->currentTranslation->getName();
-    }
-    
-    public function setName($name)
-    {
-        $this->currentTranslation->setName($name);
-        return $this;
-    }
-
-    public function getCurrentTranslation()
-    {
-        return $this->currentTranslation;
     }
 
     public function getTranslations()
