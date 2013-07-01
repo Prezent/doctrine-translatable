@@ -16,6 +16,13 @@ class Mixin implements TranslatableInterface
     use TranslatableTrait;
 
     /**
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\Column(name="id", type="integer")
+     */
+    protected $id;
+
+    /**
      * @Prezent\Translations(targetEntity="Prezent\Tests\Fixture\MixinTranslation")
      */
     protected $translations;

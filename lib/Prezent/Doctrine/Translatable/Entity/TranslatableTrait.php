@@ -16,13 +16,6 @@ use Prezent\Doctrine\Translatable\TranslationInterface;
 trait TranslatableTrait
 {
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(name="id", type="integer")
-     */
-    protected $id;
-
-    /**
      * Get the translations
      *
      * @return ArrayCollection
