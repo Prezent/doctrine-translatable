@@ -51,7 +51,7 @@ class TranslatableListener implements EventSubscriber
     /**
      * @var array
      */
-    private $queries = array();
+    private $cache = array();
 
     /**
      * Constructor
@@ -236,10 +236,15 @@ class TranslatableListener implements EventSubscriber
      */
     public function getTranslatableMetadata($className)
     {
+        if (array_key_exists($className, $this->cache)) {
+            return $this->cache[$className];
+        }
+
         if ($metadata = $this->metadataFactory->getMetadataForClass($className)) {
             $metadata->validate();
         }
 
+        $this->cache[$className] = $metadata;
         return $metadata;
     }
 
