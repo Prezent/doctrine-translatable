@@ -23,3 +23,7 @@ Tell composer to install the extension:
 ```bash
 $ php composer.phar update prezent/doctrine-translatable
 ```
+
+## Documentation
+
+The documentation can be found in the [doc directory](doc/index.md).
