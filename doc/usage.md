@@ -29,7 +29,7 @@ $post->translate('fr')->getTitle(); // Title in French
 
 Translations are plain related entities. You can query them directly.
 
-```
+```php
 // Search posts by title
 $qb = $em->createQueryBuilder();
 $qb->select('p')

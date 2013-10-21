@@ -21,7 +21,7 @@ own implementation of the interfaces.
 Index
 -----
 
-1. [Installation](instalation.md)
+1. [Installation](installation.md)
 2. [Getting started](getting-started.md)
 3. [Usage](usage.md)
 4. [Complete examples](examples.md)
