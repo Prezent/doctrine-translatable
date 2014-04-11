@@ -8,6 +8,7 @@ for support with the [a2lix/TranslationsFormBundle](https://github.com/a2lix/Tra
 of this, it has a separate abstract base class for all your translatable entities.
 
 ```php
+<?php
 use Prezent\Doctrine\Translatable\Annotation as Prezent;
 use Prezent\Doctrine\Translatable\Entity\AbstractTranslatable;
 
@@ -52,7 +53,8 @@ abstract class TranslatableEntity extends AbstractTranslatable
         }
 
         if (!$translation = $this->translations->get($locale)) {
-            $translation = new self::getTranslationEntityClass();
+            $className=$this->getTranslationEntityClass();
+            $translation = new $className;
             $translation->setLocale($locale);
             $this->addTranslation($translation);
         }
@@ -63,8 +65,12 @@ abstract class TranslatableEntity extends AbstractTranslatable
 
     /**
      * Used for a2lix translations and the translate helper
+     * @return string
      */
-    abstract public static function getTranslationEntityClass();
+    public function getTranslationEntityClass() {
+        return get_class($this).'Translation';
+    }
+
 }
 ```
 
@@ -136,11 +142,6 @@ class BlogPost extends TranslatableEntity
     {
         $this->translate()->setContent($content);
         return $this;
-    }
-
-    public static function getTranslationEntityClass()
-    {
-        return 'BlogPostTranslation';
     }
 }
 ```
