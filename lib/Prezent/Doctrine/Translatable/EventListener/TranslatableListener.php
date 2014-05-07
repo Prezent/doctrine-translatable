@@ -217,7 +217,7 @@ class TranslatableListener implements EventSubscriber
         );
 
         if (!$this->hasUniqueConstraint($mapping, $columns)) {
-            $constraints = isset($mapping->table['uniqueConstraints']) ? $mapping->table['UniqueConstraints']: array();
+            $constraints = isset($mapping->table['uniqueConstraints']) ? $mapping->table['uniqueConstraints']: array();
             $constraints[$mapping->getTableName() . '_uniq_trans'] = array(
                 'columns' => $columns,
             );
