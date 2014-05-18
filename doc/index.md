@@ -25,3 +25,4 @@ Index
 2. [Getting started](getting-started.md)
 3. [Usage](usage.md)
 4. [Complete examples](examples.md)
+5. [Yaml mapping](yaml-mapping.md)
