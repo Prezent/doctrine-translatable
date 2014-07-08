@@ -20,6 +20,8 @@ use Prezent\Doctrine\Translatable\TranslationInterface;
 abstract class AbstractTranslation implements TranslationInterface
 {
     /**
+     * ID
+     *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(name="id", type="integer")
@@ -27,11 +29,15 @@ abstract class AbstractTranslation implements TranslationInterface
     protected $id;
 
     /**
+     * Translatable model
+     *
      * Mapping provided by implementation
      */
     protected $translatable;
 
     /**
+     * Locale
+     *
      * @ORM\Column(name="locale", type="string")
      * @Prezent\Locale
      */

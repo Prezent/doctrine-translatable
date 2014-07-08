@@ -20,11 +20,15 @@ use Prezent\Doctrine\Translatable\TranslationInterface;
 abstract class AbstractTranslatable implements TranslatableInterface
 {
     /**
+     * ID
+     *
      * Mapping provided by implementation
      */
     protected $id;
 
     /**
+     * Translations
+     *
      * Mapping provided by implementation
      */
     protected $translations;
