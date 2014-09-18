@@ -3,7 +3,7 @@ Usage
 
 ## Using translations
 
-If you followed the [exmaple](getting-started.md) then translations will be automatically
+If you followed the [example](getting-started.md) then translations will be automatically
 loaded from the database for the current locale configured in the listener.
 
 ```php
