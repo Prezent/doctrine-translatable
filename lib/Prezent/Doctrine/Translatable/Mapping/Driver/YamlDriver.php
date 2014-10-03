@@ -107,8 +107,7 @@ class YamlDriver extends FileDriver
 
         if (isset($config[$className]['fields'])) {
             foreach ($config[$className]['fields'] as $name => $field) {
-
-                if (isset($fields['prezent']['translatable']) && in_array('locale', $fields['prezent']['translatable'])) {
+                if (isset($field['prezent']['translatable']) && in_array('locale', $field['prezent']['translatable'])) {
                     $propertyMetadata = new PropertyMetadata($className, $name);
 
                     $classMetadata->locale = $propertyMetadata;
