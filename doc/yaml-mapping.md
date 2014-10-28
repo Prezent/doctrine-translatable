@@ -37,6 +37,12 @@ BlogPost:
             fallbackLocale: fallbackLocale # optional
     fields:
         ...
+    oneToMany:
+        translations:
+            targetEntity: BlogPostTranslation
+            mappedBy: translatable
+            cascade: ["persist", "remove"]
+            indexBy: locale
 ```
 
 ```yaml
@@ -53,4 +59,12 @@ BlogPostTranslation:
             prezent:
                 translatable:
                     - locale
+    manyToOne:
+        translatable:
+            targetEntity: BlogPost
+            inversedBy: translations
+            joinColumn:
+                name: translatable_id
+                referencedColumnName: id
+                onDelete: "CASCADE"
 ```
