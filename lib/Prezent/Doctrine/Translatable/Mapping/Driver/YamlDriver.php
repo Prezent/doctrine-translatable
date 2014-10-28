@@ -66,7 +66,7 @@ class YamlDriver extends FileDriver
         if (isset($translatable['fallbackLocale'])) {
             $propertyMetadata = new PropertyMetadata($className, $translatable['fallbackLocale']);
 
-            $classMetadata->currentLocale = $propertyMetadata;
+            $classMetadata->fallbackLocale = $propertyMetadata;
             $classMetadata->addPropertyMetadata($propertyMetadata);
         }
 
