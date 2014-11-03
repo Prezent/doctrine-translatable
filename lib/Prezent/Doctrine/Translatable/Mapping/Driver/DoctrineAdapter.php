@@ -17,7 +17,6 @@ use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\Common\Persistence\ObjectManager;
 use Metadata\Driver\DriverChain;
 use Metadata\Driver\DriverInterface;
-use Prezent\Doctrine\Translatable\Mapping\Driver\AnnotationDriver;
 
 /**
  * Adapt a Doctrine metadata driver
@@ -30,7 +29,7 @@ class DoctrineAdapter
     /**
      * Create a driver from a Doctrine registry
      *
-     * @param Registry $registry
+     * @param ManagerRegistry $registry
      * @return DriverInterface
      */
     public static function fromRegistry(ManagerRegistry $registry)

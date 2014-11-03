@@ -26,3 +26,4 @@ Index
 3. [Usage](usage.md)
 4. [Complete examples](examples.md)
 5. [Yaml mapping](yaml-mapping.md)
+6. [Xml mapping](xml-mapping.md)
