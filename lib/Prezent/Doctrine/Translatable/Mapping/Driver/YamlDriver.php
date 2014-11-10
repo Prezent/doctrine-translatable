@@ -105,24 +105,10 @@ class YamlDriver extends FileDriver
         $classMetadata->translatable = $propertyMetadata;
         $classMetadata->addPropertyMetadata($propertyMetadata);
 
-        if (isset($config[$className]['fields'])) {
-            foreach ($config[$className]['fields'] as $name => $field) {
-                if (isset($field['prezent']['translatable']) && in_array('locale', $field['prezent']['translatable'])) {
-                    $propertyMetadata = new PropertyMetadata($className, $name);
-
-                    $classMetadata->locale = $propertyMetadata;
-                    $classMetadata->addPropertyMetadata($propertyMetadata);
-                }
-            }
-        }
-
-        // Set to default if no locale property has been set
-        if (! $classMetadata->locale) {
-            $propertyMetadata = new PropertyMetadata($className, 'locale');
-
-            $classMetadata->locale = $propertyMetadata;
-            $classMetadata->addPropertyMetadata($propertyMetadata);
-        }
+        $locale = isset($translatable['locale']) ? $translatable['locale'] : 'locale';
+        $propertyMetadata = new PropertyMetadata($className, $locale);
+        $classMetadata->locale = $propertyMetadata;
+        $classMetadata->addPropertyMetadata($propertyMetadata);
 
         return $classMetadata;
     }
