@@ -1,0 +1,24 @@
+Prezent\Tests\Fixture\BasicTranslation:
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: IDENTITY
+    fields:
+        locale:
+            type: string
+        name:
+            type: string
+    manyToOne:
+        translatable:
+            targetEntity: Prezent\Tests\Fixture\Basic
+            inversedBy: translations
+            joinColumn:
+                name: translatable_id
+                referencedColumnName: id
+                onDelete: CASCADE
+    prezent:
+        translatable:
+            field: translatable
+            targetEntity: Prezent\Tests\Fixture\Basic
+            locale: locale

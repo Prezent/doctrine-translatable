@@ -18,9 +18,11 @@ $metadataFactory  = new MetadataFactory($annotationDriver);
 with the code below:
 
 ```php
+use Doctrine\Common\Persistence\Mapping\Driver\DefaultFileLocator;
 use Prezent\Doctrine\Translatable\Mapping\Driver\YamlDriver;
 
-$yamlDriver = new YamlDriver($em);
+$locator = new DefaultFileLocator(...);
+$yamlDriver = new YamlDriver($locator);
 $metadataFactory  = new MetadataFactory($yamlDriver);
 ```
 

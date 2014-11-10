@@ -1,0 +1,21 @@
+Prezent\Tests\Fixture\Basic:
+    type: entity
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: IDENTITY
+    oneToMany:
+        translations:
+            targetEntity: Prezent\Tests\Fixture\BasicTranslation
+            mappedBy: translatable
+            cascade: ["persist", "remove", "merge"]
+            orphanRemoval: true
+            indexBy: locale
+            fetch: EXTRA_LAZY
+    prezent:
+        translatable:
+            field: translations
+            targetEntity: Prezent\Tests\Fixture\BasicTranslation
+            currentLocale: currentLocale
+            fallbackLocale: fallbackLocale

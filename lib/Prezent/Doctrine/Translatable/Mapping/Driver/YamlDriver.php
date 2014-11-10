@@ -114,17 +114,6 @@ class YamlDriver extends FileDriver
     }
 
     /**
-     * Returns whether the given doctrine file driver is valid for this type of file.
-     *
-     * @param DoctrineFileDriver $driver
-     * @return bool
-     */
-    protected function isValidDriver(DoctrineFileDriver $driver)
-    {
-        return $driver instanceof ORMYamlDriver;
-    }
-
-    /**
      * Parses the given mapping file.
      * @param string $file
      * @return mixed

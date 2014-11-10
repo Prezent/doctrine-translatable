@@ -9,14 +9,9 @@
 
 namespace Prezent\Doctrine\Translatable\Mapping\Driver;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\Mapping\Driver\FileLocator;
-use Doctrine\Common\Persistence\ObjectManager;
-use Metadata\Driver\DriverChain as MetadataDriverChain;
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\Common\Persistence\Mapping\MappingException;
 use Metadata\Driver\DriverInterface;
-use Doctrine\Common\Persistence\Mapping\Driver\FileDriver as DoctrineFileDriver;
 use Prezent\Doctrine\Translatable\Mapping\TranslatableMetadata;
 use Prezent\Doctrine\Translatable\Mapping\TranslationMetadata;
 
@@ -28,32 +23,13 @@ use Prezent\Doctrine\Translatable\Mapping\TranslationMetadata;
 abstract class FileDriver implements DriverInterface
 {
     /**
-     * @var ManagerRegistry
-     */
-    private $managerRegistry;
-
-    /**
-     * @var ObjectManager
-     */
-    private $objectManager;
-
-    /**
-     * Only one of $managerRegistry or $objectManager must be given.
+     * Constructor
      *
-     * @param ObjectManager $objectManager
-     * @param ManagerRegistry $managerRegistry
-     * @throws \InvalidArgumentException
+     * @param FileLocator $locator
      */
-    public function __construct(ObjectManager $objectManager = null, ManagerRegistry $managerRegistry = null)
+    public function __construct(FileLocator $locator)
     {
-        if (null === $objectManager && null === $managerRegistry) {
-            throw new \InvalidArgumentException('One of $managerRegistry or $objectManager must be set');
-        } elseif (null !== $objectManager && null !== $managerRegistry) {
-            throw new \InvalidArgumentException('One of $managerRegistry or $objectManager must be set, not both');
-        }
-
-        $this->managerRegistry = $managerRegistry;
-        $this->objectManager = $objectManager;
+        $this->locator = $locator;
     }
 
     /**
@@ -79,26 +55,13 @@ abstract class FileDriver implements DriverInterface
      */
     protected function getMappingFile($className)
     {
-        $om = $this->objectManager ?: $this->managerRegistry->getManagerForClass($className);
-
-        if (! $om) {
-            return null;
-        }
-
-        $locator = $this->getLocator($om->getConfiguration()->getMetadataDriverImpl());
-
-        if (! $locator) {
-            return null;
-        }
-
         try {
-            return $locator->findMappingFile($className);
+            return $this->locator->findMappingFile($className);
         } catch (MappingException $e) {
         }
 
         return null;
     }
-
 
     /**
      * Load metadata for a translatable class
@@ -124,42 +87,6 @@ abstract class FileDriver implements DriverInterface
      * @return mixed
      */
     abstract protected function parse($file);
-
-    /**
-     * Returns whether the given doctrine file driver is valid for this type of file.
-     *
-     * @param DoctrineFileDriver $driver
-     * @return bool
-     */
-    abstract protected function isValidDriver(DoctrineFileDriver $driver);
-
-    /**
-     * @param mixed $omDriver
-     * @return FileLocator|null
-     */
-    private function getLocator($omDriver)
-    {
-        if ($omDriver instanceof MetadataDriverChain || $omDriver instanceof MappingDriverChain) {
-
-            $locators = array();
-
-            foreach ($omDriver->getDrivers() as $nestedOmDriver) {
-                $locator = $this->getLocator($nestedOmDriver);
-
-                if ($locator) {
-                    $locators[] = $locator;
-                }
-            }
-
-            return $locators ? new FileLocatorChain($locators) : null;
-
-        } else if ($omDriver instanceof DoctrineFileDriver && $this->isValidDriver($omDriver)) {
-            return $omDriver->getLocator();
-        }
-
-        return null;
-    }
-
 
     /**
      * Reads the configuration for the given classname.
