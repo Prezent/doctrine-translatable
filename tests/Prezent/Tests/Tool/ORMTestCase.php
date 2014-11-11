@@ -86,7 +86,8 @@ abstract class ORMTestCase extends \PHPUnit_Framework_TestCase
         return new TranslatableListener(new MetadataFactory(new AnnotationDriver(new AnnotationReader())));
     }
 
-    public function getFixtureClasses() {
+    public function getFixtureClasses()
+    {
         return array();
     }
 }
