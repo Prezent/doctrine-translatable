@@ -1,21 +1,13 @@
 Yaml mapping
 ============
 
-If you don't (want to) use annotations for your doctrine mappings, you can use the yaml driver.
+If you don't (want to) use annotations for your doctrine mappings, you can use the yaml driver. If you use
+the `DoctrineAdapter` to create your driver, the Yaml driver will be used automatically.
 
-## Enabling the Yaml driver
+## Manually adding the Yaml driver
 
-To use the Yaml driver, you can replace the annotation driver with the Yaml driver.
- You should replace the following lines of the [getting started guide](getting-started.md):
-
-```php
-use Prezent\Doctrine\Translatable\Mapping\Driver\AnnotationDriver;
-
-$annotationDriver = new AnnotationDriver($annotationReader);
-$metadataFactory  = new MetadataFactory($annotationDriver);
-```
-
-with the code below:
+You can enable the Yaml drive manually using the following code. This allows you to keep the Doctrine mappings separate
+from your translatable mappings.
 
 ```php
 use Doctrine\Common\Persistence\Mapping\Driver\DefaultFileLocator;

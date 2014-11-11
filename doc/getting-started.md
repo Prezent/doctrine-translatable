@@ -213,18 +213,16 @@ The last thing you need to to is setup the translatable listener. If you use Sym
 [prezent/doctrine-translatable-bundle](https://github.com/Prezent/doctrine-translatable-bundle/blob/master/Resources/doc/index.md)
 which does this for you.
 
-First, create the listener instance. It needs a metadata factory in order to read the custom annotations.
+First, create the listener instance. It needs a metadata factory in order to read the custom annotations. There is a `DoctrineAdapter`
+that can automatically create the correct drivers based on your Doctrine configuration.
 
 ```php
-use Doctrine\Common\Annotations\AnnotationReader;
 use Metadata\MetadataFactory;
-use Prezent\Doctrine\Translatable\Mapping\Driver\AnnotationDriver;
+use Prezent\Doctrine\Translatable\Mapping\Driver\DoctrineAdapter;
 use Prezent\Doctrine\Translatable\EventListener\TranslatableListener;
 
-$annotationReader = new AnnotationReader(); // Or re-use the reader you created for the ORM
-$annotationDriver = new AnnotationDriver($annotationReader);
-$metadataFactory  = new MetadataFactory($annotationDriver);
-
+$driver = DoctrineAdapter::fromManager($em);
+$metadataFactory  = new MetadataFactory($driver);
 $translatableListener = new TranslatableListener($metadataFactory);
 ```
 
