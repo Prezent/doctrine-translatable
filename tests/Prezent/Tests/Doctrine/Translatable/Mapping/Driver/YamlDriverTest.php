@@ -16,9 +16,9 @@ class YamlDriverTest extends BaseDriverTest
 {
     protected function getDriver()
     {
-        $locator = new SymfonyFileLocator([
+        $locator = new SymfonyFileLocator(array(
             __DIR__ . '/../../../../Fixture/yaml' => 'Prezent\\Tests\\Fixture',
-        ], '.yml');
+        ), '.yml');
 
         return new YamlDriver($locator);
     }
