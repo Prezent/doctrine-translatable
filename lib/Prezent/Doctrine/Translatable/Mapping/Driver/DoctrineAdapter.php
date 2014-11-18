@@ -33,7 +33,7 @@ class DoctrineAdapter
      * @param Registry $registry
      * @return DriverInterface
      */
-    public static function fromRegistry(Registry $registry)
+    public static function fromRegistry(ManagerRegistry $registry)
     {
         $drivers = array();
         foreach ($registry->getManagers() as $manager) {
