@@ -15,6 +15,7 @@ use Doctrine\Common\Persistence\Mapping\Driver\FileDriver as DoctrineFileDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
 use Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver;
 use Metadata\Driver\DriverChain;
 use Metadata\Driver\DriverInterface;
@@ -77,7 +78,10 @@ class DoctrineAdapter
 
         if ($omDriver instanceof DoctrineFileDriver) {
             $reflClass = new \ReflectionClass($omDriver);
-            $driverName = $omDriver instanceof SimplifiedYamlDriver ? 'YamlDriver' : $reflClass->getShortName();
+            
+            $driverName = $omDriver instanceof SimplifiedYamlDriver || $omDriver instanceof SimplifiedXmlDriver ? 
+                str_replace('Simplified', '', $reflClass->getShortName()) : $reflClass->getShortName();
+           
             $class = 'Prezent\\Doctrine\\Translatable\\Mapping\\Driver\\' . $driverName;
 
             if (class_exists($class)) {
