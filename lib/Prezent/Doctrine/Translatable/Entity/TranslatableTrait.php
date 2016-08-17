@@ -34,7 +34,7 @@ trait TranslatableTrait
     public function addTranslation(TranslationInterface $translation)
     {
         if (!$this->translations->contains($translation)) {
-            $this->translations[] = $translation;
+            $this->translations[$translation->getLocale()] = $translation;
             $translation->setTranslatable($this);
         }
     
