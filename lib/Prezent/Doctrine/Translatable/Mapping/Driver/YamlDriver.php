@@ -120,6 +120,6 @@ class YamlDriver extends FileDriver
      */
     protected function parse($file)
     {
-        return Yaml::parse($file);
+        return Yaml::parse(file_get_contents($file));
     }
 }
