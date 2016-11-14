@@ -285,11 +285,11 @@ class TranslatableListener implements EventSubscriber
         if ($metadata instanceof TranslatableMetadata) {
 
             if ($metadata->fallbackLocale) {
-                $metadata->fallbackLocale->setValue($entity, $this->fallbackLocale);
+                $metadata->fallbackLocale->setValue($entity, $this->getFallbackLocale());
             }
 
             if ($metadata->currentLocale) {
-                $metadata->currentLocale->setValue($entity, $this->currentLocale);
+                $metadata->currentLocale->setValue($entity, $this->getCurrentLocale());
             }
         }
     }
