@@ -258,6 +258,10 @@ class TranslatableListener implements EventSubscriber
      */
     private function hasUniqueConstraint(ClassMetadata $mapping, array $columns)
     {
+        if (!array_diff($mapping->getIdentifierColumnNames(), $columns)) {
+            return true;
+        }
+        
         if (!isset($mapping->table['uniqueConstraints'])) {
             return false;
         }
