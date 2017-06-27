@@ -139,7 +139,7 @@ class TranslatableListener implements EventSubscriber
         $classMetadata = $eventArgs->getClassMetadata();
         $reflClass = $classMetadata->reflClass;
 
-        if (!$reflClass || $reflClass->isAbstract()) {
+        if (!$reflClass) {
             return;
         }
 
@@ -161,7 +161,8 @@ class TranslatableListener implements EventSubscriber
     private function mapTranslatable(ClassMetadata $mapping)
     {
         $metadata = $this->getTranslatableMetadata($mapping->name);
-        if (!$mapping->hasAssociation($metadata->translations->name)) {
+
+        if (!$mapping->hasAssociation($metadata->translations->name) && $metadata->targetEntity) {
             $targetMetadata = $this->getTranslatableMetadata($metadata->targetEntity);
 
             $mapping->mapOneToMany(array(
@@ -187,7 +188,7 @@ class TranslatableListener implements EventSubscriber
         $metadata = $this->getTranslatableMetadata($mapping->name);
 
         // Map translatable relation
-        if (!$mapping->hasAssociation($metadata->translatable->name)) {
+        if (!$mapping->hasAssociation($metadata->translatable->name) && $metadata->targetEntity) {
             $targetMetadata = $this->getTranslatableMetadata($metadata->targetEntity);
 
             $mapping->mapManyToOne(array(
@@ -242,7 +243,9 @@ class TranslatableListener implements EventSubscriber
         }
 
         if ($metadata = $this->metadataFactory->getMetadataForClass($className)) {
-            $metadata->validate();
+            if (!$metadata->reflection->isAbstract()) {
+                $metadata->validate();
+            }
         }
 
         $this->cache[$className] = $metadata;
@@ -287,7 +290,6 @@ class TranslatableListener implements EventSubscriber
         $metadata = $this->getTranslatableMetadata(get_class($entity));
 
         if ($metadata instanceof TranslatableMetadata) {
-
             if ($metadata->fallbackLocale) {
                 $metadata->fallbackLocale->setValue($entity, $this->getFallbackLocale());
             }
