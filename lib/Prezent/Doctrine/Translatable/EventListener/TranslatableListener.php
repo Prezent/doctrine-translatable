@@ -162,7 +162,10 @@ class TranslatableListener implements EventSubscriber
     {
         $metadata = $this->getTranslatableMetadata($mapping->name);
 
-        if (!$mapping->hasAssociation($metadata->translations->name) && $metadata->targetEntity) {
+        if ($metadata->targetEntity
+            && $metadata->translations
+            && !$mapping->hasAssociation($metadata->translations->name)
+        ) {
             $targetMetadata = $this->getTranslatableMetadata($metadata->targetEntity);
 
             $mapping->mapOneToMany(array(
@@ -188,7 +191,10 @@ class TranslatableListener implements EventSubscriber
         $metadata = $this->getTranslatableMetadata($mapping->name);
 
         // Map translatable relation
-        if (!$mapping->hasAssociation($metadata->translatable->name) && $metadata->targetEntity) {
+        if ($metadata->targetEntity
+            && $metadata->translatable
+            && !$mapping->hasAssociation($metadata->translatable->name)
+        ) {
             $targetMetadata = $this->getTranslatableMetadata($metadata->targetEntity);
 
             $mapping->mapManyToOne(array(
