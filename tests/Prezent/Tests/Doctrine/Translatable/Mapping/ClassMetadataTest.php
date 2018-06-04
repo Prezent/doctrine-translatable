@@ -2,12 +2,13 @@
 
 namespace Prezent\Tests\Doctrine\Translatable\Mapping;
 
+use PHPUnit\Framework\TestCase;
 use Prezent\Doctrine\Translatable\Mapping\PropertyMetadata;
 use Prezent\Doctrine\Translatable\Mapping\TranslatableMetadata;
 use Prezent\Doctrine\Translatable\Mapping\TranslationMetadata;
 use Prezent\Tests\Tool\ORMTestCase;
 
-class ClassMetadataTest extends \PHPUnit_Framework_TestCase
+class ClassMetadataTest extends TestCase
 {
     public function testTranslatableSerialization()
     {

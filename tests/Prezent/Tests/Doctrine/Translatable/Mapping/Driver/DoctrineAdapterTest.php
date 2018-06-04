@@ -8,11 +8,12 @@ use Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver as ORMAnnotationDriver;
 use Doctrine\ORM\Mapping\Driver\YamlDriver as ORMYamlDriver;
 use Metadata\Driver\DriverChain;
+use PHPUnit\Framework\TestCase;
 use Prezent\Doctrine\Translatable\Mapping\Driver\AnnotationDriver;
 use Prezent\Doctrine\Translatable\Mapping\Driver\DoctrineAdapter;
 use Prezent\Doctrine\Translatable\Mapping\Driver\YamlDriver;
 
-class DoctrineAdapterTest extends \PHPUnit_Framework_TestCase
+class DoctrineAdapterTest extends TestCase
 {
     public function testFromMetadataDriver()
     {

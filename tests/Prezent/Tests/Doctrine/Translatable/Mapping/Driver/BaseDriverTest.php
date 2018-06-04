@@ -9,7 +9,9 @@
 
 namespace Prezent\Tests\Doctrine\Translatable\Mapping\Driver;
 
-abstract class BaseDriverTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+abstract class BaseDriverTest extends TestCase
 {
     public function testLoadTranslatableMetadata()
     {

@@ -12,10 +12,11 @@ use Doctrine\ORM\Mapping\Driver\AnnotationDriver as ORMAnnotationDriver;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\Setup;
 use Metadata\MetadataFactory;
+use PHPUnit\Framework\TestCase;
 use Prezent\Doctrine\Translatable\EventListener\TranslatableListener;
 use Prezent\Doctrine\Translatable\Mapping\Driver\AnnotationDriver;
 
-abstract class ORMTestCase extends \PHPUnit_Framework_TestCase
+abstract class ORMTestCase extends TestCase
 {
     private $em;
     private $evm;
