@@ -1,31 +1,26 @@
 language: php
 
-php:
-    - 5.3
-    - 5.4
-    - 5.5
-    - 5.6
-    - 7.0
-    - 7.1
-
-env:
-    - DOCTRINE_VERSION="2.3.*"
-    - DOCTRINE_VERSION="2.4.*"
-    - DOCTRINE_VERSION="2.5.*"
+sudo: false
 
 matrix:
     include:
         - php: 5.6
-          env: DOCTRINE_VERSION="dev-master"
+          env: DOCTRINE="^2.4"
         - php: 7.0
-          env: DOCTRINE_VERSION="dev-master"
+          env: DOCTRINE="^2.4"
+        - php: 7.0
+          env: DOCTRINE="^2.5"
         - php: 7.1
-          env: DOCTRINE_VERSION="dev-master"
-    exclude:
-        - php: 5.3
-          env: DOCTRINE_VERSION="2.5.*"
+          env: DOCTRINE="^2.5"
+        - php: 7.1
+          env: DOCTRINE="^2.6"
+        - php: 7.2
+          env: DOCTRINE="^2.6"
 
-before_script:
-    - curl -s http://getcomposer.org/installer | php
-    - php composer.phar require doctrine/orm:${DOCTRINE_VERSION} doctrine/dbal:${DOCTRINE_VERSION} --dev --no-interaction --prefer-source
-    - cp phpunit.xml.dist phpunit.xml
+before_install:
+  - if [ "$DOCTRINE" != "" ]; then composer require --dev --no-update doctrine/orm=$DOCTRINE; fi
+
+install:
+  - composer update $COMPOSER_FLAGS --prefer-dist
+
+script: phpunit
