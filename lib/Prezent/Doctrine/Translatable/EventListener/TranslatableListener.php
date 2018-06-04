@@ -72,7 +72,7 @@ class TranslatableListener implements EventSubscriber
     {
         return $this->currentLocale;
     }
-    
+
     /**
      * Set the current locale
      *
@@ -94,7 +94,7 @@ class TranslatableListener implements EventSubscriber
     {
         return $this->fallbackLocale;
     }
-    
+
     /**
      * Set the fallback locale
      *
@@ -116,7 +116,7 @@ class TranslatableListener implements EventSubscriber
     {
         return $this->metadataFactory;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -210,6 +210,10 @@ class TranslatableListener implements EventSubscriber
             ));
         }
 
+        if (!$metadata->translatable) {
+            return;
+        }
+
         // Map locale field
         if (!$mapping->hasField($metadata->locale->name)) {
             $mapping->mapField(array(
@@ -270,7 +274,7 @@ class TranslatableListener implements EventSubscriber
         if (!array_diff($mapping->getIdentifierColumnNames(), $columns)) {
             return true;
         }
-        
+
         if (!isset($mapping->table['uniqueConstraints'])) {
             return false;
         }
