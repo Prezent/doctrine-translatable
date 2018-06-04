@@ -5,17 +5,19 @@ sudo: false
 matrix:
     include:
         - php: 5.6
-          env: DOCTRINE="^2.4"
+          env: DOCTRINE="2.3.*"
+        - php: 5.6
+          env: DOCTRINE="2.4.*"
         - php: 7.0
-          env: DOCTRINE="^2.4"
+          env: DOCTRINE="2.4.*"
         - php: 7.0
-          env: DOCTRINE="^2.5"
+          env: DOCTRINE="2.5.*"
         - php: 7.1
-          env: DOCTRINE="^2.5"
+          env: DOCTRINE="2.5.*"
         - php: 7.1
-          env: DOCTRINE="^2.6"
+          env: DOCTRINE="2.6.*"
         - php: 7.2
-          env: DOCTRINE="^2.6"
+          env: DOCTRINE="2.6.*"
 
 before_install:
   - if [ "$DOCTRINE" != "" ]; then composer require --dev --no-update doctrine/orm=$DOCTRINE; fi
