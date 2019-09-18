@@ -12,8 +12,8 @@ matrix:
           env: DOCTRINE="2.6.*"
         - php: 7.3
           env: DOCTRINE="2.6.*"
-        - php: 7.4
-          env: DOCTRINE="2.6.*"
+#        - php: 7.4
+#          env: DOCTRINE="2.6.*"
 
 before_install:
   - if [ "$DOCTRINE" != "" ]; then composer require --dev --no-update doctrine/orm=$DOCTRINE; fi
