@@ -57,7 +57,7 @@ class TranslationMetadata extends MergeableClassMetadata
     /**
      * {@inheritdoc}
      */
-    public function merge(MergeableInterface $object)
+    public function merge(MergeableInterface $object): void
     {
         if (!$object instanceof self) {
             throw new \InvalidArgumentException(sprintf('$object must be an instance of %s.', __CLASS__));

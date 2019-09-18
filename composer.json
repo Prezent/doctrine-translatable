@@ -20,9 +20,9 @@
         "source": "https://github.com/prezent/doctrine-translatable"
     },
     "require": {
-        "php": ">=5.3.2",
+        "php": ">=7.1.0",
         "doctrine/common": "^2.3",
-        "jms/metadata": "~1.1"
+        "jms/metadata": "~1.1|~2.0"
     },
     "require-dev": {
         "doctrine/orm": "^2.3",
