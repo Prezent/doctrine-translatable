@@ -253,7 +253,9 @@ class TranslatableListener implements EventSubscriber
         }
 
         if ($metadata = $this->metadataFactory->getMetadataForClass($className)) {
-            if (!$metadata->reflection->isAbstract()) {
+            $reflection = new \ReflectionClass($className);
+
+            if (!$reflection->isAbstract()) {
                 $metadata->validate();
             }
         }
@@ -301,12 +303,24 @@ class TranslatableListener implements EventSubscriber
 
         if ($metadata instanceof TranslatableMetadata) {
             if ($metadata->fallbackLocale) {
-                $metadata->fallbackLocale->setValue($entity, $this->getFallbackLocale());
+                $this->setReflectionPropertyValue($entity, 'fallbackLocale', $this->getFallbackLocale());
             }
 
             if ($metadata->currentLocale) {
-                $metadata->currentLocale->setValue($entity, $this->getCurrentLocale());
+                $this->setReflectionPropertyValue($entity, 'currentLocale', $this->getCurrentLocale());
             }
         }
+    }
+
+    /**
+     * @param object $object
+     * @param string $property
+     * @param mixed $value
+     */
+    private function setReflectionPropertyValue($object, string $property, $value): void
+    {
+        $reflection = new \ReflectionProperty(get_class($object), $property);
+        $reflection->setAccessible(true);
+        $reflection->setValue($object, $value);
     }
 }

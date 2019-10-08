@@ -3,6 +3,7 @@
 namespace Prezent\Tests\Doctrine\Translatable\Mapping;
 
 use PHPUnit\Framework\TestCase;
+use Prezent\Doctrine\Translatable\Mapping\MappingException;
 use Prezent\Doctrine\Translatable\Mapping\PropertyMetadata;
 use Prezent\Doctrine\Translatable\Mapping\TranslatableMetadata;
 use Prezent\Doctrine\Translatable\Mapping\TranslationMetadata;
@@ -51,20 +52,18 @@ class ClassMetadataTest extends TestCase
         $this->assertSame($meta->locale, $meta->propertyMetadata['locale']);
     }
 
-    /**
-     * @expectedException Prezent\Doctrine\Translatable\Mapping\MappingException
-     */
     public function testTranslatableValidation()
     {
+        $this->expectException(MappingException::class);
+
         $meta = new TranslatableMetadata('Prezent\\Tests\\Fixture\\Basic');
         $meta->validate();
     }
 
-    /**
-     * @expectedException Prezent\Doctrine\Translatable\Mapping\MappingException
-     */
     public function testTranslationValidation()
     {
+        $this->expectException(MappingException::class);
+
         $meta = new TranslationMetadata('Prezent\\Tests\\Fixture\\BasicTranslation');
         $meta->validate();
     }

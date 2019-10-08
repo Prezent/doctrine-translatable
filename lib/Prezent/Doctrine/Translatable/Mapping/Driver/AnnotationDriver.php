@@ -11,6 +11,7 @@ namespace Prezent\Doctrine\Translatable\Mapping\Driver;
 
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
+use Metadata\ClassMetadata;
 use Metadata\Driver\DriverInterface;
 use Prezent\Doctrine\Translatable\Annotation\CurrentTranslation;
 use Prezent\Doctrine\Translatable\Annotation\FallbackTranslation;
@@ -43,7 +44,7 @@ class AnnotationDriver implements DriverInterface
     /**
      * {@inheritdoc}
      */
-    public function loadMetadataForClass(\ReflectionClass $class)
+    public function loadMetadataForClass(\ReflectionClass $class): ?ClassMetadata
     {
         if ($class->implementsInterface('Prezent\\Doctrine\\Translatable\\TranslatableInterface')) {
             return $this->loadTranslatableMetadata($class);
@@ -74,12 +75,12 @@ class AnnotationDriver implements DriverInterface
                 $classMetadata->currentLocale = $propertyMetadata;
                 $classMetadata->addPropertyMetadata($propertyMetadata);
             }
-            
+
             if ($this->reader->getPropertyAnnotation($property, 'Prezent\\Doctrine\\Translatable\\Annotation\\FallbackLocale')) {
                 $classMetadata->fallbackLocale = $propertyMetadata;
                 $classMetadata->addPropertyMetadata($propertyMetadata);
             }
-            
+
             if ($annot = $this->reader->getPropertyAnnotation($property, 'Prezent\\Doctrine\\Translatable\\Annotation\\Translations')) {
                 $classMetadata->targetEntity = $annot->targetEntity;
                 $classMetadata->translations = $propertyMetadata;
