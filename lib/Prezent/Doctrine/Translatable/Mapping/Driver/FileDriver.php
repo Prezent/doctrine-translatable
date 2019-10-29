@@ -46,6 +46,8 @@ abstract class FileDriver implements DriverInterface
         if ($class->implementsInterface('Prezent\\Doctrine\\Translatable\\TranslationInterface')) {
             return $this->loadTranslationMetadata($class->name, $this->readMapping($class->name));
         }
+
+        return null;
     }
 
     /**

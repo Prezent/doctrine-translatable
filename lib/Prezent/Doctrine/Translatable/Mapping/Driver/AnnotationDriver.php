@@ -53,6 +53,8 @@ class AnnotationDriver implements DriverInterface
         if ($class->implementsInterface('Prezent\\Doctrine\\Translatable\\TranslationInterface')) {
             return $this->loadTranslationMetadata($class);
         }
+
+        return null;
     }
 
     /**
