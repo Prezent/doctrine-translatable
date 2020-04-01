@@ -13,7 +13,7 @@ class TranslatableListenerValidationTest extends ORMTestCase
 {
     public function testAnnotationValidation()
     {
-        $this->expectException(AnnotationException::class);
+        $this->expectException(MappingException::class);
 
         $classMetadata = new ClassMetadata('Prezent\Tests\Fixture\BadMapping');
         $classMetadata->initializeReflection(new RuntimeReflectionService());
