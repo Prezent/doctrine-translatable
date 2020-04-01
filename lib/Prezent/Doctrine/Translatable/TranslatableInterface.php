@@ -14,26 +14,4 @@ namespace Prezent\Doctrine\Translatable;
  */
 interface TranslatableInterface
 {
-    /**
-     * Get all translations
-     *
-     * @return ArrayCollection
-     */
-    public function getTranslations();
-
-    /**
-     * Add a new translation
-     *
-     * @param TranslationInterface $translation
-     * @return self
-     */
-    public function addTranslation(TranslationInterface $translation);
-
-    /**
-     * Remove a translation
-     *
-     * @param TranslationInterface $translation
-     * @return self
-     */
-    public function removeTranslation(TranslationInterface $translation);
 }
