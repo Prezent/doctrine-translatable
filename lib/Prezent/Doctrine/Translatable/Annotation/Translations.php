@@ -20,8 +20,7 @@ namespace Prezent\Doctrine\Translatable\Annotation;
 class Translations
 {
     /**
-     * @var string
-     * @Required
+     * @var ?string
      */
     public $targetEntity;
 }
