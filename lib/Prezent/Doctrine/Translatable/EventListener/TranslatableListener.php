@@ -219,6 +219,7 @@ class TranslatableListener implements EventSubscriber
             $mapping->mapField(array(
                 'fieldName' => $metadata->locale->name,
                 'type' => 'string',
+                'length' => 5,
             ));
         }
 
