@@ -203,7 +203,7 @@ class TranslatableListener implements EventSubscriber
                 'inversedBy'   => $targetMetadata->translations->name,
                 'joinColumns'  => array(array(
                     'name'                 => 'translatable_id',
-                    'referencedColumnName' => 'id',
+                    'referencedColumnName' => $metadata->referencedColumnName,
                     'onDelete'             => 'CASCADE',
                     'nullable'             => false,
                 )),

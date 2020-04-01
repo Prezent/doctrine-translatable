@@ -101,11 +101,12 @@ class YamlDriver extends FileDriver
 
         $targetEntity = 'Translation' === substr($className, -11) ? substr($className, 0, -11) : null;
 
-        $classMetadata->targetEntity = isset($translatable['targetEntity']) ? $translatable['targetEntity']: $targetEntity;
+        $classMetadata->targetEntity = $translatable['targetEntity'] ?? $targetEntity;
+        $classMetadata->referencedColumnName = $translatable['referencedColumnName'] ?? 'id';
         $classMetadata->translatable = $propertyMetadata;
         $classMetadata->addPropertyMetadata($propertyMetadata);
 
-        $locale = isset($translatable['locale']) ? $translatable['locale'] : 'locale';
+        $locale = $translatable['locale'] ?? 'locale';
         $propertyMetadata = new PropertyMetadata($className, $locale);
         $classMetadata->locale = $propertyMetadata;
         $classMetadata->addPropertyMetadata($propertyMetadata);

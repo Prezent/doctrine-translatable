@@ -24,4 +24,9 @@ class Translatable
      * @Required
      */
     public $targetEntity;
+
+    /**
+     * @var string
+     */
+    public $referencedColumnName = 'id';
 }

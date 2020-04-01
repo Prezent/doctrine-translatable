@@ -72,6 +72,7 @@ class AnnotationDriver implements DriverInterface
             }
 
             $propertyMetadata = new PropertyMetadata($class->name, $property->getName());
+            $targetEntity = $class->name . 'Translation';
 
             if ($this->reader->getPropertyAnnotation($property, 'Prezent\\Doctrine\\Translatable\\Annotation\\CurrentLocale')) {
                 $classMetadata->currentLocale = $propertyMetadata;
@@ -84,7 +85,7 @@ class AnnotationDriver implements DriverInterface
             }
 
             if ($annot = $this->reader->getPropertyAnnotation($property, 'Prezent\\Doctrine\\Translatable\\Annotation\\Translations')) {
-                $classMetadata->targetEntity = $annot->targetEntity;
+                $classMetadata->targetEntity = $annot->targetEntity ?? $targetEntity;
                 $classMetadata->translations = $propertyMetadata;
                 $classMetadata->addPropertyMetadata($propertyMetadata);
             }
@@ -109,9 +110,11 @@ class AnnotationDriver implements DriverInterface
             }
 
             $propertyMetadata = new PropertyMetadata($class->name, $property->getName());
+            $targetEntity = 'Translation' === substr($class->name, -11) ? substr($class->name, 0, -11) : null;
 
             if ($annot = $this->reader->getPropertyAnnotation($property, 'Prezent\\Doctrine\\Translatable\\Annotation\\Translatable')) {
-                $classMetadata->targetEntity = $annot->targetEntity;
+                $classMetadata->targetEntity = $annot->targetEntity ?? $targetEntity;
+                $classMetadata->referencedColumnName = $annot->referencedColumnName;
                 $classMetadata->translatable = $propertyMetadata;
                 $classMetadata->addPropertyMetadata($propertyMetadata);
             }

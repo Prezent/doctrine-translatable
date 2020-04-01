@@ -25,6 +25,11 @@ class TranslationMetadata extends MergeableClassMetadata
     public $targetEntity;
 
     /**
+     * @var string
+     */
+    public $referencedColumnName = 'id';
+
+    /**
      * @var PropertyMetadata
      */
     public $translatable;
@@ -49,6 +54,10 @@ class TranslationMetadata extends MergeableClassMetadata
             throw new MappingException(sprintf('No translatable targetEntity specified for %s', $this->name));
         }
 
+        if (!$this->referencedColumnName) {
+            throw new MappingException(sprintf('No translatable referencedColumnName specified for %s', $this->name));
+        }
+
         if (!$this->locale) {
             throw new MappingException(sprintf('No locale specified for %s', $this->name));
         }
@@ -69,6 +78,10 @@ class TranslationMetadata extends MergeableClassMetadata
             $this->targetEntity = $object->targetEntity;
         }
 
+        if ($object->referencedColumnName) {
+            $this->referencedColumnName = $object->referencedColumnName;
+        }
+
         if ($object->translatable) {
             $this->translatable = $object->translatable;
         }
@@ -85,6 +98,7 @@ class TranslationMetadata extends MergeableClassMetadata
     {
         return serialize(array(
             $this->targetEntity,
+            $this->referencedColumnName,
             $this->translatable ? $this->translatable->name : null,
             $this->locale       ? $this->locale->name       : null,
             parent::serialize(),
@@ -98,6 +112,7 @@ class TranslationMetadata extends MergeableClassMetadata
     {
         list (
             $this->targetEntity,
+            $this->referencedColumnName,
             $translatable,
             $locale,
             $parent

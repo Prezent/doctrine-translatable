@@ -117,12 +117,10 @@ class XmlDriver extends FileDriver
         }
 
         $nodeTranslatable = $nodeList[0];
-
-        $translatableField = (string)$nodeTranslatable['field'];
-
-        $translatableTargetEntity = (string)$nodeTranslatable['target-entity'];
-
-        $locale = (string)(string)$nodeTranslatable['locale'];
+        $translatableField = (string) $nodeTranslatable['field'];
+        $translatableTargetEntity = (string) $nodeTranslatable['target-entity'];
+        $translatableReferencedColumnName = (string) $nodeTranslatable['referenced-column-name'] ?? 'id';
+        $locale = (string) $nodeTranslatable['locale'];
 
         $classMetadata = new TranslationMetadata($className);
 
@@ -135,6 +133,7 @@ class XmlDriver extends FileDriver
         $targetEntity = 'Translation' === substr($className, -11) ? substr($className, 0, -11) : null;
 
         $classMetadata->targetEntity = !empty($translatableTargetEntity) ? $translatableTargetEntity : $targetEntity;
+        $classMetadata->referencedColumnName = $translatableReferencedColumnName;
         $classMetadata->translatable = $propertyMetadata;
         $classMetadata->addPropertyMetadata($propertyMetadata);
 
