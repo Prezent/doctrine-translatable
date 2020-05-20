@@ -300,7 +300,8 @@ class TranslatableListener implements EventSubscriber
     public function postLoad(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
-        $metadata = $this->getTranslatableMetadata(get_class($entity));
+        $class = $args->getEntityManager()->getClassMetadata(get_class($entity))->getName(); // Resolve proxy class
+        $metadata = $this->getTranslatableMetadata($class);
 
         if ($metadata instanceof TranslatableMetadata) {
             if ($metadata->fallbackLocale) {
