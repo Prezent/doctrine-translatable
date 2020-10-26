@@ -11,6 +11,7 @@ namespace Prezent\Doctrine\Translatable\EventListener;
 
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\EventSubscriber;
+use Doctrine\Common\Persistence\Proxy;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -321,6 +322,11 @@ class TranslatableListener implements EventSubscriber
      */
     private function setReflectionPropertyValue($object, string $property, $value): void
     {
+        // Cannot set property on Doctrine Proxy
+        if ($object instanceof Proxy) {
+            $object->__load();
+        }
+
         $reflection = new \ReflectionProperty(get_class($object), $property);
         $reflection->setAccessible(true);
         $reflection->setValue($object, $value);
