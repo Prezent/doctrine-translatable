@@ -306,11 +306,11 @@ class TranslatableListener implements EventSubscriber
 
         if ($metadata instanceof TranslatableMetadata) {
             if ($metadata->fallbackLocale) {
-                $this->setReflectionPropertyValue($entity, 'fallbackLocale', $this->getFallbackLocale());
+                $this->setReflectionPropertyValue($entity, $class, 'fallbackLocale', $this->getFallbackLocale());
             }
 
             if ($metadata->currentLocale) {
-                $this->setReflectionPropertyValue($entity, 'currentLocale', $this->getCurrentLocale());
+                $this->setReflectionPropertyValue($entity, $class, 'currentLocale', $this->getCurrentLocale());
             }
         }
     }
@@ -320,14 +320,14 @@ class TranslatableListener implements EventSubscriber
      * @param string $property
      * @param mixed $value
      */
-    private function setReflectionPropertyValue($object, string $property, $value): void
+    private function setReflectionPropertyValue($object, string $class, string $property, $value): void
     {
         // Cannot set property on Doctrine Proxy
         if ($object instanceof Proxy) {
             $object->__load();
         }
 
-        $reflection = new \ReflectionProperty(get_class($object), $property);
+        $reflection = new \ReflectionProperty($class, $property);
         $reflection->setAccessible(true);
         $reflection->setValue($object, $value);
     }
