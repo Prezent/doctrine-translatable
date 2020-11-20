@@ -7,7 +7,6 @@ use Prezent\Doctrine\Translatable\Mapping\MappingException;
 use Prezent\Doctrine\Translatable\Mapping\PropertyMetadata;
 use Prezent\Doctrine\Translatable\Mapping\TranslatableMetadata;
 use Prezent\Doctrine\Translatable\Mapping\TranslationMetadata;
-use Prezent\Tests\Tool\ORMTestCase;
 
 class ClassMetadataTest extends TestCase
 {

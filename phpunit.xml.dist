@@ -3,13 +3,13 @@
     <!-- Define the test suites -->
     <testsuites>
         <testsuite name="prezent-doctrine-translatable">
-            <directory>tests/Prezent</directory>
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
     <!-- Code Coverage settings -->
     <filter>
         <whitelist>
-            <directory suffix=".php">./lib/Prezent</directory>
+            <directory suffix=".php">./src</directory>
         </whitelist>
     </filter>
 </phpunit>

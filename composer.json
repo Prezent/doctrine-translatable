@@ -30,7 +30,14 @@
         "phpunit/phpunit": "^8.5"
     },
     "autoload": {
-        "psr-0": { "Prezent\\Doctrine\\Translatable": "lib/" }
+        "psr-4": {
+            "Prezent\\Doctrine\\Translatable\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Prezent\\Tests\\": "tests"
+        }
     },
     "extra": {
         "branch-alias": {
