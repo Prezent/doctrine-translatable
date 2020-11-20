@@ -20,21 +20,22 @@ $metadataFactory  = new MetadataFactory($xmlDriver);
 ## Xml mapping example
 
 ```xml
-# BlogPost.orm.xml
+<!-- BlogPost.orm.xml -->
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
-                  xmlns:prezent="prezent"
+                  xmlns:prezent="https://prezent.nl/schemas/doctrine-translatable"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
-                                      http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+                                      http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd
+                                      https://prezent.nl/schemas/doctrine-translatable
+                                      https://prezent.nl/schemas/doctrine-translatable-3.0.xsd">
 
     ...
 
-        <!-- field="translations" #optional (default: translations) -->
-        <!-- target-entity="BlogPostTranslation" #optional (default: [EntityName]Translation) -->
-        <!-- current-locale="currentLocale" fallback-locale="fallbackLocale"  #optional -->
-        <!-- fallback-locale="fallbackLocale" #optional -->
-        <prezent:translatable field="translations" target-entity="BlogPostTranslation" current-locale="currentLocale" fallback-locale="fallbackLocale"/>
+        <prezent:translatable 
+            translations="translations" 
+            target-entity="BlogPostTranslation" 
+            current-locale="currentLocale" 
+            fallback-locale="fallbackLocale"/>
 
     ...
 
@@ -42,23 +43,18 @@ $metadataFactory  = new MetadataFactory($xmlDriver);
 ```
 
 ```xml
-# BlogPostTranslation.orm.xml
+<!-- BlogPostTranslation.orm.xml -->
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
-                  xmlns:prezent="prezent"
+                  xmlns:prezent="https://prezent.nl/schemas/doctrine-translatable"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
-                                      http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+                                      http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd
+                                      https://prezent.nl/schemas/doctrine-translatable
+                                      https://prezent.nl/schemas/doctrine-translatable-3.0.xsd">
 
     ...
 
-        <field name="locale" column="locale" type="string" length="2">
-            <prezent:locale />
-        </field>
-
-        <!-- field="translatable" #optional (default: translatable) -->
-        <!-- target-entity="BlogPost" # optional (default: entity name without "Translation" suffix) -->
-        <prezent:translatable field="translatable" target-entity="BlogPost"/>
+        <prezent:translation translatable="translatable" target-entity="BlogPost" referenced-column-name="id" locale="locale"/>
 
     ...
 

@@ -16,60 +16,55 @@ use Prezent\Doctrine\Translatable\Mapping\TranslatableMetadata;
 use Prezent\Doctrine\Translatable\Mapping\TranslationMetadata;
 use SimpleXMLElement;
 
-
 /**
  * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
+ * @author Maarten de Boer <maarten@cloudstek.nl>
  */
 class XmlDriver extends FileDriver
 {
     /**
-     * Load metadata for a translatable class
-     *
-     * @param string $className
-     * @param mixed  $config
-     *
-     * @throws \Exception
-     * @return TranslatableMetadata|null
+     * @inheritDoc
      */
     protected function loadTranslatableMetadata($className, $config)
     {
-        if (!$config) {
-            return;
+        if ($config === null || !$config instanceof SimpleXMLElement) {
+            return null;
         }
 
-        $xml = new SimpleXMLElement($config);
+        $config->registerXPathNamespace('prezent', 'https://prezent.nl/schemas/doctrine-translatable');
+        $nodeList = $config->xpath('//prezent:translatable');
 
-        $xml->registerXPathNamespace('prezent', 'prezent');
-
-        $nodeList = $xml->xpath('//prezent:translatable');
-        if (0 == count($nodeList)) {
-            return;
+        if (count($nodeList) === 0) {
+            return null;
         }
 
-        if (1 < count($nodeList)) {
+        if (count($nodeList) > 1) {
             throw new \Exception("Configuration defined twice");
         }
 
         $node = $nodeList[0];
 
+        // Get class metadata
         $classMetadata = new TranslatableMetadata($className);
 
-        $translatableField = (string)$node['field'];
+        // Target entity
+        $translatableTargetEntity = (string)$node['target-entity'];
+        $classMetadata->targetEntity = !empty($translatableTargetEntity)
+            ? $translatableTargetEntity
+            : $className . 'Translation';
+
+        // Translations field
+        $translationsField = (string)$node['translations'];
 
         $propertyMetadata = new PropertyMetadata(
             $className,
-            // defaults to translatable
-            !empty($translatableField) ? $translatableField : 'translations'
+            !empty($translationsField) ? $translationsField : 'translations'
         );
 
-        // default targetEntity
-        $targetEntity = $className . 'Translation';
-
-        $translatableTargetEntity    = (string)$node['target-entity'];
-        $classMetadata->targetEntity = !empty($translatableTargetEntity) ? $translatableTargetEntity : $targetEntity;
         $classMetadata->translations = $propertyMetadata;
         $classMetadata->addPropertyMetadata($propertyMetadata);
 
+        // Current locale
         $currentLocale = (string)$node['current-locale'];
         if (!empty($currentLocale)) {
             $propertyMetadata = new PropertyMetadata($className, $currentLocale);
@@ -78,6 +73,7 @@ class XmlDriver extends FileDriver
             $classMetadata->addPropertyMetadata($propertyMetadata);
         }
 
+        // Fallback locale``
         $fallbackLocale = (string)$node['fallback-locale'];
         if (!empty($fallbackLocale)) {
             $propertyMetadata = new PropertyMetadata($className, $fallbackLocale);
@@ -90,52 +86,54 @@ class XmlDriver extends FileDriver
     }
 
     /**
-     * Load metadata for a translation class
-     *
-     * @param string $className
-     * @param mixed  $config
-     *
-     * @throws \Exception
-     * @return TranslationMetadata|null
+     * @inheritDoc
      */
     protected function loadTranslationMetadata($className, $config)
     {
-        if (!$config) {
-            return;
+        if ($config === null || !$config instanceof SimpleXMLElement) {
+            return null;
         }
 
-        $xml = new SimpleXMLElement($config);
-        $xml->registerXPathNamespace('prezent', 'prezent');
-        $nodeList = $xml->xpath('//prezent:translatable');
+        $config->registerXPathNamespace('prezent', 'https://prezent.nl/schemas/doctrine-translatable');
+        $nodeList = $config->xpath('//prezent:translation');
 
-        if (0 == count($nodeList)) {
-            return;
+        if (count($nodeList) === 0) {
+            return null;
         }
 
-        if (1 < count($nodeList)) {
+        if (count($nodeList) > 1) {
             throw new \Exception("Configuration defined twice");
         }
 
-        $nodeTranslatable = $nodeList[0];
-        $translatableField = (string) $nodeTranslatable['field'];
-        $translatableTargetEntity = (string) $nodeTranslatable['target-entity'];
-        $translatableReferencedColumnName = (string) $nodeTranslatable['referenced-column-name'] ?? 'id';
-        $locale = (string) $nodeTranslatable['locale'];
+        $node = $nodeList[0];
 
+        // Get class metadata
         $classMetadata = new TranslationMetadata($className);
 
+        // Translatable field
+        $translatableField = (string)$node['translatable'];
         $propertyMetadata = new PropertyMetadata(
             $className,
-            // defaults to translatable
             !empty($translatableField) ? $translatableField : 'translatable'
         );
 
-        $targetEntity = 'Translation' === substr($className, -11) ? substr($className, 0, -11) : null;
-
-        $classMetadata->targetEntity = !empty($translatableTargetEntity) ? $translatableTargetEntity : $targetEntity;
-        $classMetadata->referencedColumnName = $translatableReferencedColumnName;
         $classMetadata->translatable = $propertyMetadata;
         $classMetadata->addPropertyMetadata($propertyMetadata);
+
+        // Target entity
+        $translatableTargetEntity = (string)$node['target-entity'];
+        $classMetadata->targetEntity = !empty($translatableTargetEntity)
+            ? $translatableTargetEntity
+            : ('Translation' === substr($className, -11)
+                ? substr($className, 0, -11)
+                : null);
+
+        // Referenced column name
+        $translatableReferencedColumnName = (string)$node['referenced-column-name'] ?? 'id';
+        $classMetadata->referencedColumnName = $translatableReferencedColumnName;
+
+        // Locale
+        $locale = (string)$node['locale'];
 
         if ($locale) {
             $propertyMetadata = new PropertyMetadata($className, $locale);
@@ -156,14 +154,10 @@ class XmlDriver extends FileDriver
     }
 
     /**
-     * Parses the given mapping file.
-     *
-     * @param string $file
-     *
-     * @return mixed
+     * @inheritDoc
      */
     protected function parse($file)
     {
-        return file_get_contents($file);
+        return new SimpleXMLElement(file_get_contents($file));
     }
 }
