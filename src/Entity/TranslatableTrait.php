@@ -9,30 +9,10 @@
 
 namespace Prezent\Doctrine\Translatable\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Prezent\Doctrine\Translatable\Annotation as Prezent;
-use Prezent\Doctrine\Translatable\TranslatableInterface;
 use Prezent\Doctrine\Translatable\TranslationInterface;
 
-/**
- * @ORM\MappedSuperclass
- */
-abstract class AbstractTranslatable implements TranslatableInterface
+trait TranslatableTrait
 {
-    /**
-     * ID
-     *
-     * Mapping provided by implementation
-     */
-    protected $id;
-
-    /**
-     * Translations
-     *
-     * Mapping provided by implementation
-     */
-    protected $translations;
-
     /**
      * Get the translations
      *
@@ -42,7 +22,7 @@ abstract class AbstractTranslatable implements TranslatableInterface
     {
         return $this->translations;
     }
-    
+
     /**
      * Add a translation
      *
@@ -55,10 +35,10 @@ abstract class AbstractTranslatable implements TranslatableInterface
             $this->translations[$translation->getLocale()] = $translation;
             $translation->setTranslatable($this);
         }
-    
+
         return $this;
     }
-    
+
     /**
      * Remove a translation
      *
@@ -70,7 +50,7 @@ abstract class AbstractTranslatable implements TranslatableInterface
         if ($this->translations->removeElement($translation)) {
             $translation->setTranslatable(null);
         }
-    
+
         return $this;
     }
 }

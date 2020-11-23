@@ -9,23 +9,16 @@
 
 namespace Prezent\Doctrine\Translatable\EventListener;
 
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Common\Persistence\Proxy;
-use Doctrine\DBAL\Connection;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Events;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
+use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
-use Doctrine\ORM\Query;
-use Metadata\Driver\DriverChain;
+use Doctrine\Persistence\Proxy;
 use Metadata\MetadataFactory;
 use Prezent\Doctrine\Translatable\Mapping\TranslatableMetadata;
 use Prezent\Doctrine\Translatable\Mapping\TranslationMetadata;
-use Prezent\Doctrine\Translatable\TranslatableInterface;
-use Prezent\Doctrine\Translatable\TranslationInterface;
 
 /**
  * Load translations on demand

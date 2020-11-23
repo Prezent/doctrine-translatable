@@ -9,8 +9,6 @@
 
 namespace Prezent\Doctrine\Translatable\Mapping\Driver;
 
-use Doctrine\Common\Persistence\Mapping\Driver\FileDriver as DoctrineFileDriver;
-use Doctrine\ORM\Mapping\Driver\XmlDriver as ORMXmlDriver;
 use Prezent\Doctrine\Translatable\Mapping\PropertyMetadata;
 use Prezent\Doctrine\Translatable\Mapping\TranslatableMetadata;
 use Prezent\Doctrine\Translatable\Mapping\TranslationMetadata;

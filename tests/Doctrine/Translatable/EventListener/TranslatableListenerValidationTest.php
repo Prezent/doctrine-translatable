@@ -2,8 +2,7 @@
 
 namespace Prezent\Tests\Doctrine\Translatable\Mapping;
 
-use Doctrine\Common\Annotations\AnnotationException;
-use Doctrine\Common\Persistence\Mapping\RuntimeReflectionService;
+use Doctrine\Persistence\Mapping\RuntimeReflectionService;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Prezent\Doctrine\Translatable\Mapping\MappingException;

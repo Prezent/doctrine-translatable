@@ -9,8 +9,8 @@
 
 namespace Prezent\Doctrine\Translatable\Mapping\Driver;
 
-use Doctrine\Common\Persistence\Mapping\Driver\FileLocator;
-use Doctrine\Common\Persistence\Mapping\MappingException;
+use Doctrine\Persistence\Mapping\Driver\FileLocator;
+use Doctrine\Persistence\Mapping\MappingException;
 use Metadata\ClassMetadata;
 use Metadata\Driver\DriverInterface;
 use Prezent\Doctrine\Translatable\Mapping\TranslatableMetadata;

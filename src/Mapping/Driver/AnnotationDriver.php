@@ -10,12 +10,11 @@
 namespace Prezent\Doctrine\Translatable\Mapping\Driver;
 
 use Doctrine\Common\Annotations\Reader;
-use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
+use Doctrine\Persistence\Mapping\ClassMetadataFactory;
 use Metadata\ClassMetadata;
 use Metadata\Driver\DriverInterface;
 use Prezent\Doctrine\Translatable\Annotation\CurrentTranslation;
 use Prezent\Doctrine\Translatable\Annotation\FallbackTranslation;
-use Prezent\Doctrine\Translatable\Annotation\Translations;
 use Prezent\Doctrine\Translatable\Mapping\PropertyMetadata;
 use Prezent\Doctrine\Translatable\Mapping\TranslatableMetadata;
 use Prezent\Doctrine\Translatable\Mapping\TranslationMetadata;

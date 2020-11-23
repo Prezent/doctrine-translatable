@@ -38,7 +38,7 @@ abstract class ORMTestCase extends TestCase
             'memory' => true,
         );
 
-        AnnotationRegistry::registerFile(realpath(__DIR__ . '/../../../../vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'));
+        AnnotationRegistry::registerFile(realpath(__DIR__ . '/../../vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'));
 
         $reader = new AnnotationReader();
         $reader = new CachedReader($reader, new ArrayCache());

@@ -9,7 +9,7 @@
 
 namespace Prezent\Tests\Doctrine\Translatable\Mapping\Driver;
 
-use Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator;
+use Doctrine\Persistence\Mapping\Driver\SymfonyFileLocator;
 use Prezent\Doctrine\Translatable\Mapping\Driver\YamlDriver;
 
 class YamlDriverTest extends BaseDriverTest
