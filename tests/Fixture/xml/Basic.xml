@@ -1,25 +1,26 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
-                  xmlns:prezent="prezent">
+                  xmlns:prezent="https://prezent.nl/schemas/doctrine-translatable">
 
-    <entity name="Prezent\Tests\Fixture\Basic" >
+    <entity name="Prezent\Tests\Fixture\Basic">
         <id name="id" column="id" type="integer">
-            <generator strategy="AUTO" />
+            <generator strategy="AUTO"/>
         </id>
 
         <one-to-many field="translations"
                      target-entity="Prezent\Tests\Fixture\BasicTranslation"
                      mapped-by="translatable"
-                orphan-removal="true"
-                index-by="locale"
-                fetch="EXTRA_LAZY">
+                     orphan-removal="true"
+                     index-by="locale"
+                     fetch="EXTRA_LAZY">
             <cascade>
-                <cascade-persist />
-                <cascade-remove />
-                <cascade-merge />
+                <cascade-persist/>
+                <cascade-merge/>
+                <cascade-remove/>
             </cascade>
         </one-to-many>
 
-        <prezent:translatable field="translations" target-entity="Prezent\Tests\Fixture\BasicTranslation" current-locale="currentLocale" fallback-locale="fallbackLocale"/>
+        <prezent:translatable translations="translations" target-entity="Prezent\Tests\Fixture\BasicTranslation"
+                              current-locale="currentLocale" fallback-locale="fallbackLocale"/>
     </entity>
 
 </doctrine-mapping>

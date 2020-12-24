@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="https://prezent.nl/schemas/doctrine-translatable">
+    <xs:element name="translatable">
+        <xs:complexType>
+            <xs:attribute name="translations" type="xs:string" default="translations" use="optional"/>
+            <xs:attribute name="target-entity" type="xs:string" use="optional"/>
+            <xs:attribute name="current-locale" type="xs:string" default="currentLocale" use="optional"/>
+            <xs:attribute name="fallback-locale" type="xs:string" default="fallbackLocale" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="translation">
+        <xs:complexType>
+            <xs:attribute name="translatable" type="xs:string" default="translatable" use="optional"/>
+            <xs:attribute name="target-entity" type="xs:string" use="optional"/>
+            <xs:attribute name="referenced-column-name" type="xs:string" default="id" use="optional"/>
+            <xs:attribute name="locale" type="xs:string" default="locale" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
