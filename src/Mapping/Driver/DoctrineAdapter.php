@@ -19,6 +19,7 @@ use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\Persistence\ObjectManager;
 use Metadata\Driver\DriverChain;
 use Metadata\Driver\DriverInterface;
+use Doctrine\Bundle\DoctrineBundle\Mapping\MappingDriver as DoctrineBundleMappingDriver;
 
 /**
  * Adapt a Doctrine metadata driver
@@ -63,6 +64,12 @@ class DoctrineAdapter
      */
     public static function fromMetadataDriver(MappingDriver $omDriver)
     {
+        if ($omDriver instanceof DoctrineBundleMappingDriver) {
+            $propertyReflection = (new \ReflectionClass($omDriver))->getProperty('driver');
+            $propertyReflection->setAccessible(true);
+            $omDriver = $propertyReflection->getValue($omDriver);
+        }
+
         if ($omDriver instanceof MappingDriverChain) {
             $drivers = array();
             foreach ($omDriver->getDrivers() as $nestedOmDriver) {
