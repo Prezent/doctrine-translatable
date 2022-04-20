@@ -23,7 +23,8 @@
         "php": ">=7.1.0",
         "doctrine/common": "^2.3|^3.0",
         "jms/metadata": "^1.1|^2.0",
-        "symfony/cache": "^5.0|^6.0"
+        "symfony/cache": "^5.0|^6.0",
+        "doctrine/annotations": "^1.13"
     },
     "require-dev": {
         "doctrine/orm": "^2.3",
