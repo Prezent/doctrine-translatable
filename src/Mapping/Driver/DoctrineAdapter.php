@@ -12,7 +12,7 @@ namespace Prezent\Doctrine\Translatable\Mapping\Driver;
 use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
 use Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Persistence\Mapping\Driver\AnnotationDriver as DoctrineAnnotationDriver;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver as DoctrineAnnotationDriver;
 use Doctrine\Persistence\Mapping\Driver\FileDriver as DoctrineFileDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
