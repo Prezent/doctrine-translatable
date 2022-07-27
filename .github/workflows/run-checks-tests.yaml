@@ -1,0 +1,37 @@
+name: Build and tests
+on:
+    push:
+        branches:
+            - 'master'
+            - '[1-9].[0-9]'
+        tags:
+            - '**'
+    pull_request:
+        branches:
+            - '**'
+jobs:
+    cancel:
+        name: Cancel previous workflow runs
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Cancelling
+                uses: styfle/cancel-workflow-action@0.7.0
+                with:
+                    access_token: ${{ github.token }}
+    run-tests:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                php-versions: [ '7.4', '8.0', '8.1' ]
+        needs: cancel
+        steps:
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php-versions }}
+            -   name: Clone repository
+                uses: actions/checkout@v3
+            -   name: Install composer dependencies
+                run: composer install --no-interaction --optimize-autoloader
+            -   name: Run Unit tests
+                run: vendor/bin/phpunit
