@@ -92,39 +92,34 @@ class TranslationMetadata extends MergeableClassMetadata
     }
 
     /**
-     * {@inheritdoc}
+     * @return array{targetEntity: string, referencedColumnName: string, translatable: ?string, locale: ?string, parent: mixed[]}
      */
-    public function serialize()
+    public function __serialize(): array
     {
-        return serialize(array(
-            $this->targetEntity,
-            $this->referencedColumnName,
-            $this->translatable ? $this->translatable->name : null,
-            $this->locale       ? $this->locale->name       : null,
-            parent::serialize(),
-        ));
+        return [
+            'targetEntity' => $this->targetEntity,
+            'referencedColumnName' => $this->referencedColumnName,
+            'translatable' => $this->translatable->name ?? null,
+            'locale' => $this->locale->name ?? null,
+            'parent' => $this->serializeToArray(),
+        ];
     }
 
     /**
-     * {@inheritdoc}
+     * @param array{targetEntity: string, referencedColumnName: string, translatable: ?string, locale: ?string, parent: mixed[]} $data
      */
-    public function unserialize($str)
+    public function __unserialize(array $data): void
     {
-        list (
-            $this->targetEntity,
-            $this->referencedColumnName,
-            $translatable,
-            $locale,
-            $parent
-        ) = unserialize($str);
+        $this->targetEntity = $data['targetEntity'];
+        $this->referencedColumnName = $data['referencedColumnName'];
 
-        parent::unserialize($parent);
+        $this->unserializeFromArray($data['parent']);
 
-        if ($translatable) {
-            $this->translatable = $this->propertyMetadata[$translatable];
+        if ($data['translatable']) {
+            $this->translatable = $this->propertyMetadata[$data['translatable']];
         }
-        if ($locale) {
-            $this->locale = $this->propertyMetadata[$locale];
+        if ($data['locale']) {
+            $this->locale = $this->propertyMetadata[$data['locale']];
         }
     }
 }

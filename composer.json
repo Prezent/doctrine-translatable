@@ -8,7 +8,7 @@
         "translatable",
         "i18n"
     ],
-    "homepage": "http://www.prezent.nl",
+    "homepage": "https://www.prezent.nl",
     "authors": [{
         "name": "Prezent Internet B.V.",
         "email": "github@prezent.nl"
@@ -20,7 +20,7 @@
         "source": "https://github.com/prezent/doctrine-translatable"
     },
     "require": {
-        "php": ">=7.1.0",
+        "php": ">=7.4.0",
         "doctrine/common": "^2.3|^3.0",
         "doctrine/orm": ">=2.12.0",
         "jms/metadata": "^1.1|^2.0",
