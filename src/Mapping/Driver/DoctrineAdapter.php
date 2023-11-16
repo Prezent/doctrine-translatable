@@ -76,6 +76,12 @@ class DoctrineAdapter
                 $drivers[] = self::fromMetadataDriver($nestedOmDriver);
             }
 
+            // the DriverChain may also have a defaultDriver, we should not forget to add that as well
+            // mainly here to make this work in combination with Sylius
+            if (null !== $omDriver->getDefaultDriver()) {
+                $drivers[] = self::fromMetadataDriver($omDriver->getDefaultDriver());
+            }
+
             return new DriverChain($drivers);
         }
 
