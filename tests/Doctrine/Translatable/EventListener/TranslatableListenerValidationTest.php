@@ -1,6 +1,6 @@
 <?php
 
-namespace Prezent\Tests\Doctrine\Translatable\Mapping;
+namespace Prezent\Tests\Doctrine\Translatable\EventListener;
 
 use Doctrine\Persistence\Mapping\RuntimeReflectionService;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;

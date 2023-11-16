@@ -19,7 +19,9 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 abstract class ORMTestCase extends TestCase
 {
     private $em;
+
     private $evm;
+
     private $listener;
 
     public function getEntityManager()
@@ -38,7 +40,9 @@ abstract class ORMTestCase extends TestCase
             'memory' => true,
         );
 
-        AnnotationRegistry::registerFile(realpath(__DIR__ . '/../../vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'));
+        AnnotationRegistry::registerFile(
+            realpath(__DIR__ . '/../../vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/AnnotationDriver.php')
+        );
 
         $reader = new AnnotationReader();
         $reader = new PsrCachedReader($reader, new ArrayAdapter());
