@@ -12,7 +12,8 @@ namespace Prezent\Doctrine\Translatable\Mapping\Driver;
 use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
 use Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\ORM\Mapping\Driver\AnnotationDriver as DoctrineAnnotationDriver;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver as DoctrineAttributeDriver;
+use Doctrine\Persistence\Mapping\Driver\AnnotationDriver as DoctrineAnnotationDriver;
 use Doctrine\Persistence\Mapping\Driver\FileDriver as DoctrineFileDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
@@ -87,6 +88,9 @@ class DoctrineAdapter
 
         if ($omDriver instanceof DoctrineAnnotationDriver) {
             return new AnnotationDriver($omDriver->getReader());
+        }
+        if ($omDriver instanceof DoctrineAttributeDriver) {
+            return new AttributeDriver($omDriver->getReader());
         }
 
         if ($omDriver instanceof DoctrineFileDriver) {
