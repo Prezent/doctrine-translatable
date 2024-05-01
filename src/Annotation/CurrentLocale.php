@@ -8,6 +8,7 @@
  */
 
 namespace Prezent\Doctrine\Translatable\Annotation;
+use Doctrine\ORM\Mapping\MappingAttribute;
 
 /**
  * CurrentTranslation annotation
@@ -18,6 +19,7 @@ namespace Prezent\Doctrine\Translatable\Annotation;
  * @Annotation
  * @Target("PROPERTY")
  */
-class CurrentLocale
+#[\Attribute(\Attribute::TARGET_PROPERTY)]
+class CurrentLocale implements MappingAttribute
 {
 }

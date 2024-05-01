@@ -9,6 +9,12 @@
 
 namespace Prezent\Doctrine\Translatable\Annotation;
 
+use Attribute;
+use Doctrine\ORM\Mapping\MappingAttribute;
+use Doctrine\Common\Annotations\Annotation\NamedArgumentConstructor;
+use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
+use Doctrine\ODM\MongoDB\Utility\CollectionHelper;
+
 /**
  * Translations annotation
  *
@@ -16,11 +22,19 @@ namespace Prezent\Doctrine\Translatable\Annotation;
  *
  * @Annotation
  * @Target("PROPERTY")
+ * @NamedArgumentConstructor
  */
-class Translations
+#[Attribute(Attribute::TARGET_PROPERTY)]
+class Translations implements MappingAttribute
 {
     /**
      * @var string
      */
     public $targetEntity;
+
+    public function __construct(
+        ?string $targetEntity = null
+    ) {
+        $this->targetEntity = $targetEntity;
+    }
 }

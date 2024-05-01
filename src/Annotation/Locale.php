@@ -9,6 +9,9 @@
 
 namespace Prezent\Doctrine\Translatable\Annotation;
 
+use Doctrine\ORM\Mapping\MappingAttribute;
+use Doctrine\Common\Annotations\Annotation\NamedArgumentConstructor;
+
 /**
  * CurrentTranslation annotation
  *
@@ -17,7 +20,9 @@ namespace Prezent\Doctrine\Translatable\Annotation;
  *
  * @Annotation
  * @Target("PROPERTY")
+ * @NamedArgumentConstructor
  */
-class Locale
+#[\Attribute(\Attribute::TARGET_PROPERTY)]
+class Locale implements MappingAttribute
 {
 }

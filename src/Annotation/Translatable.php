@@ -8,6 +8,8 @@
  */
 
 namespace Prezent\Doctrine\Translatable\Annotation;
+use Doctrine\ORM\Mapping\MappingAttribute;
+use Doctrine\Common\Annotations\Annotation\NamedArgumentConstructor;
 
 /**
  * Translatable annotation
@@ -16,8 +18,10 @@ namespace Prezent\Doctrine\Translatable\Annotation;
  *
  * @Annotation
  * @Target("PROPERTY")
+ * @NamedArgumentConstructor
  */
-class Translatable
+#[\Attribute(\Attribute::TARGET_PROPERTY)]
+class Translatable implements MappingAttribute
 {
     /**
      * @var string
@@ -28,4 +32,13 @@ class Translatable
      * @var string
      */
     public $referencedColumnName = 'id';
+
+
+    public function __construct(
+        ?string $targetEntity,
+        ?string $referencedColumnName = 'id'
+    ) {
+        $this->targetEntity            = $targetEntity;
+        $this->referencedColumnName    = $referencedColumnName;
+    }
 }
