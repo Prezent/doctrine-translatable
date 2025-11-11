@@ -7,21 +7,21 @@
  * file that was distributed with this source code.
  */
 
-namespace Prezent\Doctrine\Translatable\Annotation;
+namespace Prezent\Doctrine\Translatable\Attribute;
+
+use Attribute;
 
 /**
- * Translations annotation
+ * Translations attribute
  *
- * This annotation indicates the one-to-many relation to the translations.
- *
- * @Annotation
- * @Target("PROPERTY")
+ * This indicates the one-to-many relation to the translations.
  */
+#[Attribute(Attribute::TARGET_PROPERTY)]
 class Translations
 {
-    public ?string $targetEntity;
+    public string $targetEntity;
 
-    public function __construct($targetEntity = null)
+    public function __construct(string $targetEntity)
     {
         $this->targetEntity = $targetEntity;
     }

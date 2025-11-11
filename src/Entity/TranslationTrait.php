@@ -20,12 +20,17 @@ trait TranslationTrait
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(name="id", type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     protected $id;
 
     /**
      * @ORM\Column(name="locale", type="string")
      * @Prezent\Locale
      */
+    #[ORM\Column(name: 'locale', type: 'string')]
+    #[Prezent\Locale]
     protected $locale;
 
     /**

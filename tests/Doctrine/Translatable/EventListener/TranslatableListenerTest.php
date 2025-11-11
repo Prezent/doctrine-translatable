@@ -1,6 +1,6 @@
 <?php
 
-namespace Prezent\Tests\Doctrine\Translatable\EventListener;
+namespace Prezent\Tests\Doctrine\Translatable\Mapping;
 
 use Prezent\Tests\Tool\ORMTestCase;
 

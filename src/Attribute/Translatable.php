@@ -7,23 +7,23 @@
  * file that was distributed with this source code.
  */
 
-namespace Prezent\Doctrine\Translatable\Annotation;
+namespace Prezent\Doctrine\Translatable\Attribute;
+
+use Attribute;
 
 /**
- * Translatable annotation
+ * Translatable attribute
  *
- * This annotation indicates the many-to-one relation to the translatable.
- *
- * @Annotation
- * @Target("PROPERTY")
+ * This indicates the many-to-one relation to the translatable.
  */
+#[Attribute(Attribute::TARGET_PROPERTY)]
 class Translatable
 {
-    public ?string $targetEntity;
+    public string $targetEntity;
 
     public string $referencedColumnName = 'id';
 
-    public function __construct(?string $targetEntity = null, string $referencedColumnName = 'id')
+    public function __construct(string $targetEntity, string $referencedColumnName = 'id')
     {
         $this->targetEntity = $targetEntity;
         $this->referencedColumnName = $referencedColumnName;

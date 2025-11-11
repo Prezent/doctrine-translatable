@@ -9,17 +9,18 @@
 
 namespace Prezent\Doctrine\Translatable\Mapping\Driver;
 
+use Doctrine\ORM\Mapping\Driver\AttributeDriver as DoctrineOrmAttributeDriver;
 use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
 use Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\ORM\Mapping\Driver\AnnotationDriver as DoctrineAnnotationDriver;
+use Doctrine\Persistence\Mapping\Driver\AnnotationDriver as DoctrineAnnotationDriver;
 use Doctrine\Persistence\Mapping\Driver\FileDriver as DoctrineFileDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
+use Doctrine\Bundle\DoctrineBundle\Mapping\MappingDriver as DoctrineBundleMappingDriver;
 use Doctrine\Persistence\ObjectManager;
 use Metadata\Driver\DriverChain;
 use Metadata\Driver\DriverInterface;
-use Doctrine\Bundle\DoctrineBundle\Mapping\MappingDriver as DoctrineBundleMappingDriver;
 
 /**
  * Adapt a Doctrine metadata driver
@@ -64,22 +65,10 @@ class DoctrineAdapter
      */
     public static function fromMetadataDriver(MappingDriver $omDriver)
     {
-        if ($omDriver instanceof DoctrineBundleMappingDriver) {
-            $propertyReflection = (new \ReflectionClass($omDriver))->getProperty('driver');
-            $propertyReflection->setAccessible(true);
-            $omDriver = $propertyReflection->getValue($omDriver);
-        }
-
         if ($omDriver instanceof MappingDriverChain) {
             $drivers = array();
             foreach ($omDriver->getDrivers() as $nestedOmDriver) {
                 $drivers[] = self::fromMetadataDriver($nestedOmDriver);
-            }
-
-            // the DriverChain may also have a defaultDriver, we should not forget to add that as well
-            // mainly here to make this work in combination with Sylius
-            if (null !== $omDriver->getDefaultDriver()) {
-                $drivers[] = self::fromMetadataDriver($omDriver->getDefaultDriver());
             }
 
             return new DriverChain($drivers);
@@ -87,6 +76,14 @@ class DoctrineAdapter
 
         if ($omDriver instanceof DoctrineAnnotationDriver) {
             return new AnnotationDriver($omDriver->getReader());
+        }
+
+        if ($omDriver instanceof DoctrineBundleMappingDriver) {
+            return self::fromMetadataDriver($omDriver->getDriver());
+        }
+
+        if ($omDriver instanceof DoctrineOrmAttributeDriver) {
+            return new AttributeDriver($omDriver->getPaths());
         }
 
         if ($omDriver instanceof DoctrineFileDriver) {
