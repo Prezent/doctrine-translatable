@@ -4,7 +4,8 @@ namespace Prezent\Tests\Tool;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Doctrine\Common\Annotations\PsrCachedReader;
+use Doctrine\Common\Annotations\CachedReader;
+use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\EventManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver as ORMAnnotationDriver;
@@ -14,14 +15,11 @@ use Metadata\MetadataFactory;
 use PHPUnit\Framework\TestCase;
 use Prezent\Doctrine\Translatable\EventListener\TranslatableListener;
 use Prezent\Doctrine\Translatable\Mapping\Driver\AnnotationDriver;
-use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 abstract class ORMTestCase extends TestCase
 {
     private $em;
-
     private $evm;
-
     private $listener;
 
     public function getEntityManager()
@@ -40,12 +38,10 @@ abstract class ORMTestCase extends TestCase
             'memory' => true,
         );
 
-        AnnotationRegistry::registerFile(
-            realpath(__DIR__ . '/../../vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/AnnotationDriver.php')
-        );
+        AnnotationRegistry::registerFile(realpath(__DIR__ . '/../../vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'));
 
         $reader = new AnnotationReader();
-        $reader = new PsrCachedReader($reader, new ArrayAdapter());
+        $reader = new CachedReader($reader, new ArrayCache());
 
         $config = Setup::createConfiguration(true);
         $config->setMetadataDriverImpl(new ORMAnnotationDriver($reader, array(__DIR__ . '/../Fixture')));

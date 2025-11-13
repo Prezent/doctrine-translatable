@@ -10,13 +10,15 @@
 namespace Prezent\Doctrine\Translatable\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Prezent\Doctrine\Translatable\Annotation as PrezentAnnotations;
+use Prezent\Doctrine\Translatable\Attribute as Prezent;
 use Prezent\Doctrine\Translatable\TranslatableInterface;
 use Prezent\Doctrine\Translatable\TranslationInterface;
 
 /**
  * @ORM\MappedSuperclass
  */
+#[ORM\MappedSuperclass]
 abstract class AbstractTranslation implements TranslationInterface
 {
     /**
@@ -26,6 +28,9 @@ abstract class AbstractTranslation implements TranslationInterface
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(name="id", type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     protected $id;
 
     /**
@@ -39,8 +44,10 @@ abstract class AbstractTranslation implements TranslationInterface
      * Locale
      *
      * @ORM\Column(name="locale", type="string")
-     * @Prezent\Locale
+     * @PrezentAnnotations\Lociale
      */
+    #[ORM\Column(name: 'locale', type: 'string')]
+    #[Prezent\Locale]
     protected $locale;
 
     /**
@@ -69,7 +76,7 @@ abstract class AbstractTranslation implements TranslationInterface
      * @param TranslatableInterface $translatable
      * @return self
      */
-    public function setTranslatable(TranslatableInterface $translatable = null)
+    public function setTranslatable(?TranslatableInterface $translatable = null)
     {
         if ($this->translatable == $translatable) {
             return $this;

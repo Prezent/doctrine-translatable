@@ -23,6 +23,8 @@ use Prezent\Doctrine\Translatable\Mapping\TranslationMetadata;
  */
 abstract class FileDriver implements DriverInterface
 {
+    protected FileLocator $locator;
+    
     /**
      * Constructor
      *

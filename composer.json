@@ -20,16 +20,16 @@
         "source": "https://github.com/prezent/doctrine-translatable"
     },
     "require": {
-        "php": ">=7.4.0",
+        "php": ">=8.2",
         "doctrine/common": "^2.3|^3.0",
         "doctrine/orm": ">=2.12.0",
         "jms/metadata": "^1.1|^2.0",
-        "symfony/cache": "^5.0|^6.0",
+        "symfony/cache": "^6.4|^7.0",
         "doctrine/annotations": "^1.13"
     },
     "require-dev": {
-        "symfony/yaml": "^5.0|6.0",
-        "phpunit/phpunit": "^8.5"
+        "symfony/yaml": "^6.4|^7.0",
+        "phpunit/phpunit": "^8.5 || ^9.6 || ^10.5 || ^11.0"
     },
     "autoload": {
         "psr-4": {
@@ -43,7 +43,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0.x-dev"
+            "dev-master": "4.x-dev"
         }
     }
 }
