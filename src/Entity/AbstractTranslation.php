@@ -44,10 +44,10 @@ abstract class AbstractTranslation implements TranslationInterface
      * Locale
      *
      * @ORM\Column(name="locale", type="string")
-     * @Prezent\Locale
+     * @PrezentAnnotations\Lociale
      */
     #[ORM\Column(name: 'locale', type: 'string')]
-    #[PrezentAnnotations\Locale]
+    #[Prezent\Locale]
     protected $locale;
 
     /**
