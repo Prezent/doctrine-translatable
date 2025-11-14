@@ -44,7 +44,7 @@ abstract class AbstractTranslation implements TranslationInterface
      * Locale
      *
      * @ORM\Column(name="locale", type="string")
-     * @PrezentAnnotations\Lociale
+     * @PrezentAnnotations\Locale
      */
     #[ORM\Column(name: 'locale', type: 'string')]
     #[Prezent\Locale]
