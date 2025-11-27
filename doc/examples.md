@@ -9,14 +9,12 @@ of this, it has a separate abstract base class for all your translatable entitie
 
 ```php
 <?php
-use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Prezent\Doctrine\Translatable\Attribute as Prezent;
 use Prezent\Doctrine\Translatable\Entity\AbstractTranslatable;
 
 abstract class TranslatableEntity extends AbstractTranslatable
 {
-    /**
-     * @Prezent\CurrentLocale
-     */
+    #[Prezent\CurrentLocale]
     protected $currentLocale;
 
     /**
@@ -77,28 +75,20 @@ abstract class TranslatableEntity extends AbstractTranslatable
 ```php
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Prezent\Doctrine\Translatable\Attribute as Prezent;
 
-/**
- * @Entity
- */
+#[ORM\Entity]
 class BlogPost extends TranslatableEntity
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="identity")
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'identity')]
+    #[ORM\Column(type: 'integer')]
     protected $id;
 
-    /**
-     * @Prezent\Translations(targetEntity="BlogPostTranslation")
-     */
+    #[Prezent\Translations(targetEntity: BlogPostTranslation::class)]
     protected $translations;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="blogPosts")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'blogPosts')]
     private $user;
 
     public function __construct()
@@ -148,28 +138,20 @@ class BlogPost extends TranslatableEntity
 
 ```php
 use Doctrine\ORM\Mapping as ORM;
-use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Prezent\Doctrine\Translatable\Attribute as Prezent;
 use Prezent\Doctrine\Translatable\Entity\AbstractTranslation;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class BlogPostTranslation extends AbstractTranslation
 {
-    /**
-     * @Prezent\Translatable(targetEntity="BlogPost")
-     */
+    #[Prezent\Translatable(targetEntity: BlogPost::class)]
     protected $translatable;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    private $title = "";
+    #[ORM\Column(type: 'string')]
+    private $title = '';
 
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $content = "";
+    #[ORM\Column(type: 'text')]
+    private $content = '';
 
     public function getTitle()
     {
@@ -205,16 +187,14 @@ class BlogPostTranslation extends AbstractTranslation
 This example is the same as before, except it uses the traits for PHP 5.4.
 
 ```php
-use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Prezent\Doctrine\Translatable\Attribute as Prezent;
 use Prezent\Doctrine\Translatable\Entity\TranslatableTrait;
 
 trait MyTranslatableTrait
 {
     use TranslatableTrait;
 
-    /**
-     * @Prezent\CurrentLocale
-     */
+    #[Prezent\CurrentLocale]
     private $currentLocale;
 
     /**
@@ -265,31 +245,23 @@ trait MyTranslatableTrait
 ```php
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Prezent\Doctrine\Translatable\Attribute as Prezent;
 use Prezent\Doctrine\Translatable\TranslatableInterface;
 
-/**
- * @Entity
- */
+#[ORM\Entity]
 class BlogPost implements TranslatableInterface
 {
     use MyTranslatableTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="identity")
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'identity')]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @Prezent\Translations(targetEntity="BlogPostTranslation")
-     */
+    #[Prezent\Translations(targetEntity: BlogPostTranslation::class)]
     private $translations;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="blogPosts")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'blogPosts')]
     private $user;
 
     public function __construct()
@@ -344,44 +316,32 @@ class BlogPost implements TranslatableInterface
 
 ```php
 use Doctrine\ORM\Mapping as ORM;
-use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Prezent\Doctrine\Translatable\Attribute as Prezent;
 use Prezent\Doctrine\Translatable\Entity\TranslationTrait;
 use Prezent\Doctrine\Translatable\TranslationInterface;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class BlogPostTranslation implements TranslationInterface
 {
     use TranslationTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(name="id", type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(name="locale", type="string")
-     * @Prezent\Locale
-     */
+    #[ORM\Column(name: 'locale', type: 'string')]
+    #[Prezent\Locale]
     private $locale;
 
-    /**
-     * @Prezent\Translatable(targetEntity="BlogPost")
-     */
+    #[Prezent\Translatable(targetEntity: BlogPost::class)]
     private $translatable;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    private $title = "";
+    #[ORM\Column(type: 'string')]
+    private $title = '';
 
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $content = "";
+    #[ORM\Column(type: 'text')]
+    private $content = '';
 
     public function getTitle()
     {

@@ -1,7 +1,7 @@
 Xml mapping
 ============
 
-If you don't (want to) use annotations for your doctrine mappings, you can use the xml driver.
+If you don't (want to) use attributes for your doctrine mappings, you can use the xml driver.
 
 ## Enabling the Xml driver
 

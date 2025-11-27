@@ -21,7 +21,7 @@ use Prezent\Doctrine\Translatable\Mapping\TranslationMetadata;
 /**
  * Load translations on demand
  */
-class TranslatableListener
+class TranslatableListener implements EventSubscriber
 {
     /**
      * @var string Locale to use for translations
@@ -105,6 +105,19 @@ class TranslatableListener
     public function getMetadataFactory()
     {
         return $this->metadataFactory;
+    }
+
+    /**
+     * Return the events this listener subscribes to
+     *
+     * @return array<string>
+     */
+    public function getSubscribedEvents(): array
+    {
+        return [
+            'loadClassMetadata',
+            'postLoad',
+        ];
     }
 
     /**

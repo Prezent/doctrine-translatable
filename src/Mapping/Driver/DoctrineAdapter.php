@@ -11,9 +11,7 @@ namespace Prezent\Doctrine\Translatable\Mapping\Driver;
 
 use Doctrine\ORM\Mapping\Driver\AttributeDriver as DoctrineOrmAttributeDriver;
 use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
-use Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Persistence\Mapping\Driver\AnnotationDriver as DoctrineAnnotationDriver;
 use Doctrine\Persistence\Mapping\Driver\FileDriver as DoctrineFileDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
@@ -74,10 +72,6 @@ class DoctrineAdapter
             return new DriverChain($drivers);
         }
 
-        if ($omDriver instanceof DoctrineAnnotationDriver) {
-            return new AnnotationDriver($omDriver->getReader());
-        }
-
         if ($omDriver instanceof DoctrineBundleMappingDriver) {
             return self::fromMetadataDriver($omDriver->getDriver());
         }
@@ -90,7 +84,7 @@ class DoctrineAdapter
             $reflClass = new \ReflectionClass($omDriver);
 
             $driverName = $reflClass->getShortName();
-            if ($omDriver instanceof SimplifiedYamlDriver || $omDriver instanceof SimplifiedXmlDriver) {
+            if ($omDriver instanceof SimplifiedXmlDriver) {
                 $driverName = str_replace('Simplified', '', $driverName);
             }
 

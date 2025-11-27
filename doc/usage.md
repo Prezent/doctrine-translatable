@@ -71,21 +71,21 @@ $posts = $qb->getQuery()->getResult();
 ## Fallback translations
 
 You can implement fallback translations yourself in your entity models. To enable this, you can create
-a property tagged with the `FallbackLocale` annotation. This property will be filled with the fallback locale
+a property tagged with the `FallbackLocale` attribute. This property will be filled with the fallback locale
 configured in the translatable listener. Example:
 
 ```php
 
 // BlogPost.php
 
+use Prezent\Doctrine\Translatable\Attribute as Prezent;
+
 class BlogPost extends AbstractTranslatable
 {
     // Mappings
     // ...
 
-    /**
-     * @Prezent\FallbackLocale
-     */
+    #[Prezent\FallbackLocale]
     private $fallbackLocale;
 
     /**

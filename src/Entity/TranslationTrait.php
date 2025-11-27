@@ -47,10 +47,10 @@ trait TranslationTrait
     /**
      * Set the translatable object
      *
-     * @param TranslatableInterface $translatable
+     * @param TranslatableInterface|null $translatable
      * @return self
      */
-    public function setTranslatable(TranslatableInterface $translatable = null)
+    public function setTranslatable(?TranslatableInterface $translatable = null)
     {
         if ($this->translatable == $translatable) {
             return $this;

@@ -4,17 +4,17 @@ sudo: false
 
 matrix:
     include:
-        - php: 7.2
-          env: DOCTRINE="2.5.*"
+        - php: 8.2
+          env: DOCTRINE="3.5.*"
           env: JMS="1.7.*"
-        - php: 7.2
-          env: DOCTRINE="2.6.*"
-          env: JMS="1.7.*"
-        - php: 7.2
-          env: DOCTRINE="2.6.*"
+        - php: 8.2
+          env: DOCTRINE="3.5.*"
           env: JMS="2.1.*"
-        - php: 7.3
-          env: DOCTRINE="2.6.*"
+        - php: 8.4
+          env: DOCTRINE="3.5.*"
+          env: JMS="1.7.*"
+        - php: 8.4
+          env: DOCTRINE="3.5.*"
           env: JMS="2.1.*"
 
 before_install:
