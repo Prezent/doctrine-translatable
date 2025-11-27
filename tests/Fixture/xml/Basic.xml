@@ -14,7 +14,6 @@
                      fetch="EXTRA_LAZY">
             <cascade>
                 <cascade-persist/>
-                <cascade-merge/>
                 <cascade-remove/>
             </cascade>
         </one-to-many>

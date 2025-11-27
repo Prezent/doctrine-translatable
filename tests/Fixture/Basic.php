@@ -34,7 +34,7 @@ class Basic implements TranslatableInterface
      * @ORM\OneToMany(
      *     targetEntity="Prezent\Tests\Fixture\BasicTranslation",
      *     mappedBy="translatable",
-     *     cascade={"persist", "remove", "merge"},
+     *     cascade={"persist", "remove"},
      *     orphanRemoval=true,
      *     indexBy="locale",
      *     fetch="EXTRA_LAZY"

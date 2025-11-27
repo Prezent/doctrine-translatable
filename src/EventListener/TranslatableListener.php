@@ -10,11 +10,9 @@
 namespace Prezent\Doctrine\Translatable\EventListener;
 
 use Doctrine\Common\EventSubscriber;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
-use Doctrine\ORM\Events;
+use Doctrine\ORM\Event\PostLoadEventArgs;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\Persistence\Proxy;
 use Metadata\MetadataFactory;
 use Prezent\Doctrine\Translatable\Mapping\TranslatableMetadata;
@@ -153,9 +151,9 @@ class TranslatableListener
                 'fieldName'     => $metadata->translations->name,
                 'targetEntity'  => $metadata->targetEntity,
                 'mappedBy'      => $targetMetadata->translatable->name,
-                'fetch'         => ClassMetadataInfo::FETCH_EXTRA_LAZY,
+                'fetch'         => ClassMetadata::FETCH_EXTRA_LAZY,
                 'indexBy'       => $targetMetadata->locale->name,
-                'cascade'       => array('persist', 'merge', 'remove'),
+                'cascade'       => array('persist', 'remove'),
                 'orphanRemoval' => true,
             ));
         }
@@ -275,13 +273,13 @@ class TranslatableListener
     /**
      * Load translations
      *
-     * @param LifecycleEventArgs $args
+     * @param PostLoadEventArgs $args
      * @return void
      */
-    public function postLoad(LifecycleEventArgs $args)
+    public function postLoad(PostLoadEventArgs $args)
     {
-        $entity = $args->getEntity();
-        $class = $args->getEntityManager()->getClassMetadata(get_class($entity))->getName(); // Resolve proxy class
+        $entity = $args->getObject();
+        $class = $args->getObjectManager()->getClassMetadata(get_class($entity))->getName(); // Resolve proxy class
         $metadata = $this->getTranslatableMetadata($class);
 
         if ($metadata instanceof TranslatableMetadata) {
