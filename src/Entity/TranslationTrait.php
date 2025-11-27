@@ -10,25 +10,16 @@
 namespace Prezent\Doctrine\Translatable\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Prezent\Doctrine\Translatable\Attribute as Prezent;
 use Prezent\Doctrine\Translatable\TranslatableInterface;
 
 trait TranslationTrait
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(name="id", type="integer")
-     */
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column(name: 'id', type: 'integer')]
     protected $id;
 
-    /**
-     * @ORM\Column(name="locale", type="string")
-     * @Prezent\Locale
-     */
     #[ORM\Column(name: 'locale', type: 'string')]
     #[Prezent\Locale]
     protected $locale;

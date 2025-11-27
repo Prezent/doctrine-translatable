@@ -1,9 +1,9 @@
 {
     "name": "prezent/doctrine-translatable",
     "type": "library",
-    "description": "Translatable behaviour extension for Doctrine2",
+    "description": "Translatable behaviour extension for Doctrine",
     "keywords": [
-        "doctrine2",
+        "doctrine",
         "extensions",
         "translatable",
         "i18n"
@@ -24,11 +24,10 @@
         "doctrine/common": "^2.3|^3.0",
         "doctrine/orm": ">=2.12.0",
         "jms/metadata": "^1.1|^2.0",
-        "symfony/cache": "^6.4|^7.0",
-        "doctrine/annotations": "^1.13"
+        "symfony/cache": "^6.4|^7.1"
     },
     "require-dev": {
-        "symfony/yaml": "^6.4|^7.0",
+        "symfony/yaml": "^6.4|^7.1",
         "phpunit/phpunit": "^8.5 || ^9.6 || ^10.5 || ^11.0"
     },
     "autoload": {
@@ -43,7 +42,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "4.x-dev"
+            "dev-master": "5.x-dev"
         }
     }
 }

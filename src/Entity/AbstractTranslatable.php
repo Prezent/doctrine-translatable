@@ -13,9 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Prezent\Doctrine\Translatable\TranslatableInterface;
 use Prezent\Doctrine\Translatable\TranslationInterface;
 
-/**
- * @ORM\MappedSuperclass
- */
 #[ORM\MappedSuperclass]
 abstract class AbstractTranslatable implements TranslatableInterface
 {
