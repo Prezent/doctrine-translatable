@@ -11,7 +11,7 @@ namespace Prezent\Tests\Doctrine\Translatable\Mapping\Driver;
 
 use PHPUnit\Framework\TestCase;
 
-abstract class BaseDriverTest extends TestCase
+abstract class BaseDriverTestCase extends TestCase
 {
     public function testLoadTranslatableMetadata()
     {

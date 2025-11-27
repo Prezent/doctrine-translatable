@@ -15,17 +15,14 @@ class TranslatableListenerTest extends ORMTestCase
             'Prezent\\Tests\\Fixture\\MappedTranslation',
             'Prezent\\Tests\\Fixture\\Inherited',
             'Prezent\\Tests\\Fixture\\InheritedTranslation',
+            'Prezent\\Tests\\Fixture\\Mixin',
+            'Prezent\\Tests\\Fixture\\MixinTranslation',
         );
-
-        if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
-            $fixtures[] = 'Prezent\\Tests\\Fixture\\Mixin';
-            $fixtures[] = 'Prezent\\Tests\\Fixture\\MixinTranslation';
-        }
 
         return $fixtures;
     }
 
-    public function getEntities()
+    public static function getEntities()
     {
         return array(
             array('5.3.0', 'Prezent\\Tests\\Fixture\\Basic',     'Prezent\\Tests\\Fixture\\BasicTranslation'),

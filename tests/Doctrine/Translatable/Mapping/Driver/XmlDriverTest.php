@@ -15,7 +15,7 @@ use Prezent\Doctrine\Translatable\Mapping\Driver\XmlDriver;
 /**
  * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
  */
-class XmlDriverTest extends BaseDriverTest
+class XmlDriverTest extends BaseDriverTestCase
 {
     protected function getDriver()
 {

@@ -2,19 +2,15 @@
 
 namespace Prezent\Tests\Tool;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
-use Doctrine\Common\Annotations\CachedReader;
-use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\EventManager;
+use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Mapping\Driver\AnnotationDriver as ORMAnnotationDriver;
+use Doctrine\ORM\ORMSetup;
 use Doctrine\ORM\Tools\SchemaTool;
-use Doctrine\ORM\Tools\Setup;
 use Metadata\MetadataFactory;
 use PHPUnit\Framework\TestCase;
 use Prezent\Doctrine\Translatable\EventListener\TranslatableListener;
-use Prezent\Doctrine\Translatable\Mapping\Driver\AnnotationDriver;
+use Prezent\Doctrine\Translatable\Mapping\Driver\AttributeDriver as TranslatableAttributeDriver;
 
 abstract class ORMTestCase extends TestCase
 {
@@ -38,15 +34,12 @@ abstract class ORMTestCase extends TestCase
             'memory' => true,
         );
 
-        AnnotationRegistry::registerFile(realpath(__DIR__ . '/../../vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'));
+        // Use Doctrine ORM 3 attribute mapping for the test entities in tests/Fixture
+        $config = ORMSetup::createAttributeMetadataConfiguration(array(__DIR__ . '/../Fixture'), true);
 
-        $reader = new AnnotationReader();
-        $reader = new CachedReader($reader, new ArrayCache());
-
-        $config = Setup::createConfiguration(true);
-        $config->setMetadataDriverImpl(new ORMAnnotationDriver($reader, array(__DIR__ . '/../Fixture')));
-
-        $em = EntityManager::create($conn, $config, $this->getEventManager());
+        // Doctrine ORM 3/4: always construct EntityManager with a DBAL Connection instance
+        $connection = DriverManager::getConnection($conn);
+        $em = new EntityManager($connection, $config, $this->getEventManager());
 
         $schemaTool = new SchemaTool($em);
         $schemaTool->createSchema(array_map(function ($class) use ($em) {
@@ -84,7 +77,8 @@ abstract class ORMTestCase extends TestCase
 
     public function createTranslatableListener()
     {
-        return new TranslatableListener(new MetadataFactory(new AnnotationDriver(new AnnotationReader())));
+        // Use attribute-based translatable metadata for the test entities
+        return new TranslatableListener(new MetadataFactory(new TranslatableAttributeDriver()));
     }
 
     public function getFixtureClasses()

@@ -3,35 +3,25 @@
 namespace Prezent\Tests\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
-use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Prezent\Doctrine\Translatable\Attribute as Prezent;
 use Prezent\Doctrine\Translatable\TranslatableInterface;
 use Prezent\Doctrine\Translatable\TranslationInterface;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class MappedTranslation implements TranslationInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(name="id", type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     private $id;
 
-    /**
-     * @Prezent\Translatable(targetEntity="Prezent\Tests\Fixture\Mapped")
-     */
+    #[Prezent\Translatable(targetEntity: Mapped::class)]
     private $translatable;
 
-    /**
-     * @Prezent\Locale
-     */
+    #[Prezent\Locale]
     private $locale;
 
-    /**
-     * @ORM\Column(name="name", type="string")
-     */
+    #[ORM\Column(name: 'name', type: 'string')]
     private $name;
 
     public function getId()
@@ -44,7 +34,7 @@ class MappedTranslation implements TranslationInterface
         return $this->translatable;
     }
     
-    public function setTranslatable(TranslatableInterface $translatable = null)
+    public function setTranslatable(?TranslatableInterface $translatable = null)
     {
         if ($this->translatable == $translatable) {
             return $this;

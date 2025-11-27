@@ -4,35 +4,25 @@ namespace Prezent\Tests\Fixture;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Prezent\Doctrine\Translatable\Attribute as Prezent;
 use Prezent\Doctrine\Translatable\TranslatableInterface;
 use Prezent\Doctrine\Translatable\TranslationInterface;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class Mapped implements TranslatableInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(name="id", type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     private $id;
 
-    /**
-     * @Prezent\CurrentLocale
-     */
+    #[Prezent\CurrentLocale]
     public $currentLocale;
 
-    /**
-     * @Prezent\FallbackLocale
-     */
+    #[Prezent\FallbackLocale]
     public $fallbackLocale;
 
-    /**
-     * @Prezent\Translations(targetEntity="Prezent\Tests\Fixture\MappedTranslation")
-     */
+    #[Prezent\Translations(targetEntity: MappedTranslation::class)]
     private $translations;
 
     public function __construct()

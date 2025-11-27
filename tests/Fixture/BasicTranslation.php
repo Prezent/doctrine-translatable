@@ -3,41 +3,31 @@
 namespace Prezent\Tests\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
-use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Prezent\Doctrine\Translatable\Attribute as Prezent;
 use Prezent\Doctrine\Translatable\TranslatableInterface;
 use Prezent\Doctrine\Translatable\TranslationInterface;
 
-/**
- * @ORM\Entity
- * @ORM\Table(
- *     uniqueConstraints={@ORM\UniqueConstraint(columns={"translatable_id", "locale"})}
- * )
- */
+#[ORM\Entity]
+#[ORM\Table(uniqueConstraints: [
+    new ORM\UniqueConstraint(columns: ['translatable_id', 'locale']),
+])]
 class BasicTranslation implements TranslationInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(name="id", type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Prezent\Tests\Fixture\Basic", inversedBy="translations")
-     * @ORM\JoinColumn(name="translatable_id", referencedColumnName="id", onDelete="CASCADE")
-     * @Prezent\Translatable(targetEntity="Prezent\Tests\Fixture\Basic")
-     */
+    #[ORM\ManyToOne(targetEntity: Basic::class, inversedBy: 'translations')]
+    #[ORM\JoinColumn(name: 'translatable_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[Prezent\Translatable(targetEntity: Basic::class)]
     private $translatable;
 
-    /**
-     * @ORM\Column(name="locale", type="string")
-     * @Prezent\Locale
-     */
+    #[ORM\Column(name: 'locale', type: 'string')]
+    #[Prezent\Locale]
     private $locale;
 
-    /**
-     * @ORM\Column(name="name", type="string")
-     */
+    #[ORM\Column(name: 'name', type: 'string')]
     private $name;
 
     public function getId()
@@ -50,7 +40,7 @@ class BasicTranslation implements TranslationInterface
         return $this->translatable;
     }
     
-    public function setTranslatable(TranslatableInterface $translatable = null)
+    public function setTranslatable(?TranslatableInterface $translatable = null)
     {
         if ($this->translatable == $translatable) {
             return $this;

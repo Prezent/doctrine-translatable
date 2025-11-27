@@ -3,16 +3,13 @@
 namespace Prezent\Tests\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
-use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Prezent\Doctrine\Translatable\Attribute as Prezent;
 use Prezent\Doctrine\Translatable\Entity\AbstractTranslatable;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class BadMapping extends AbstractTranslatable
 {
-    /**
-     * @Prezent\Translations
-     */
+    // Intentionally invalid: Translations attribute without a targetEntity
+    #[Prezent\Translations(targetEntity: '')]
     protected $translations;
 }

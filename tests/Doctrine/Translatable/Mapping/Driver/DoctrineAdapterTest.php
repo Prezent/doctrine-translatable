@@ -2,31 +2,24 @@
 
 namespace Prezent\Tests\Doctrine\Translatable\Mapping\Driver;
 
-use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver as ORMAttributeDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
-use Doctrine\Persistence\Mapping\Driver\SymfonyFileLocator;
-use Doctrine\ORM\Mapping\Driver\AnnotationDriver as ORMAnnotationDriver;
-use Doctrine\ORM\Mapping\Driver\YamlDriver as ORMYamlDriver;
 use Metadata\Driver\DriverChain;
 use PHPUnit\Framework\TestCase;
-use Prezent\Doctrine\Translatable\Mapping\Driver\AnnotationDriver;
+use Prezent\Doctrine\Translatable\Mapping\Driver\AttributeDriver;
 use Prezent\Doctrine\Translatable\Mapping\Driver\DoctrineAdapter;
-use Prezent\Doctrine\Translatable\Mapping\Driver\YamlDriver;
 
 class DoctrineAdapterTest extends TestCase
 {
     public function testFromMetadataDriver()
     {
-        $reader = new AnnotationReader();
-        $locator = new SymfonyFileLocator(array(), '.yml');
+        $paths = array(__DIR__ . '/../../../../Fixture');
 
         $omDriver = new MappingDriverChain();
-        $omDriver->addDriver(new ORMAnnotationDriver($reader), 'Prezent\\Tests\\Fixture\\Foo');
-        $omDriver->addDriver(new ORMYamlDriver($locator), 'Prezent\\Tests\\Fixture\\Bar');
+        $omDriver->addDriver(new ORMAttributeDriver($paths), 'Prezent\\Tests\\Fixture\\Foo');
 
         $expected = new DriverChain(array(
-            new AnnotationDriver($reader),
-            new YamlDriver($locator),
+            new AttributeDriver($paths),
         ));
 
         $driver = DoctrineAdapter::fromMetadataDriver($omDriver);

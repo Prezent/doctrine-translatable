@@ -4,43 +4,33 @@ namespace Prezent\Tests\Fixture;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Prezent\Doctrine\Translatable\Attribute as Prezent;
 use Prezent\Doctrine\Translatable\TranslatableInterface;
 use Prezent\Doctrine\Translatable\TranslationInterface;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class Basic implements TranslatableInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(name="id", type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     private $id;
 
-    /**
-     * @Prezent\CurrentLocale
-     */
+    #[Prezent\CurrentLocale]
     public $currentLocale;
 
-    /**
-     * @Prezent\FallbackLocale
-     */
+    #[Prezent\FallbackLocale]
     public $fallbackLocale;
 
-    /**
-     * @ORM\OneToMany(
-     *     targetEntity="Prezent\Tests\Fixture\BasicTranslation",
-     *     mappedBy="translatable",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true,
-     *     indexBy="locale",
-     *     fetch="EXTRA_LAZY"
-     * )
-     * @Prezent\Translations(targetEntity="Prezent\Tests\Fixture\BasicTranslation")
-     */
+    #[ORM\OneToMany(
+        targetEntity: BasicTranslation::class,
+        mappedBy: 'translatable',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true,
+        indexBy: 'locale',
+        fetch: 'EXTRA_LAZY'
+    )]
+    #[Prezent\Translations(targetEntity: BasicTranslation::class)]
     private $translations;
 
     public function __construct()

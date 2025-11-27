@@ -9,13 +9,13 @@
 
 namespace Prezent\Tests\Doctrine\Translatable\Mapping\Driver;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use Prezent\Doctrine\Translatable\Mapping\Driver\AnnotationDriver;
+use Prezent\Doctrine\Translatable\Mapping\Driver\AttributeDriver;
 
-class AnnotationDriverTest extends BaseDriverTest
+class AnnotationDriverTest extends BaseDriverTestCase
 {
     protected function getDriver()
     {
-        return new AnnotationDriver(new AnnotationReader());
+        // Use attribute-based mapping driver instead of the removed annotation-based one
+        return new AttributeDriver();
     }
 }
