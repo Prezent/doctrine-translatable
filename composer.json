@@ -27,7 +27,9 @@
         "symfony/cache": "^6.4|^7.1"
     },
     "require-dev": {
+        "doctrine/doctrine-bundle": "^3.0",
         "symfony/yaml": "^6.4|^7.1",
+        "symfony/var-exporter": "^6.4|^7.1",
         "phpunit/phpunit": "^8.5 || ^9.6 || ^10.5 || ^11.0"
     },
     "autoload": {

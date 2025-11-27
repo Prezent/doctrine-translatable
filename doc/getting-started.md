@@ -7,32 +7,22 @@ entity would currently look like:
 ```php
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @Entity
- */
+#[ORM\Entity]
 class BlogPost
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="identity")
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'identity')]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="blogPosts")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'blogPosts')]
     private $user;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    private $title = "";
+    #[ORM\Column(type: 'string')]
+    private $title = '';
 
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $content = "";
+    #[ORM\Column(type: 'text')]
+    private $content = '';
 
     // Getters and setters
 }
@@ -48,34 +38,24 @@ the interfaces yourself. Here is how the entities would end up looking:
 ```php
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Prezent\Doctrine\Translatable\Attribute as Prezent;
 use Prezent\Doctrine\Translatable\Entity\AbstractTranslatable;
 
-/**
- * @Entity
- */
+#[ORM\Entity]
 class BlogPost extends AbstractTranslatable
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="identity")
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'identity')]
+    #[ORM\Column(type: 'integer')]
     protected $id;
 
-    /**
-     * @Prezent\Translations(targetEntity="BlogPostTranslation")
-     */
+    #[Prezent\Translations(targetEntity: BlogPostTranslation::class)]
     protected $translations;
 
-    /**
-     * @Prezent\CurrentLocale
-     */
+    #[Prezent\CurrentLocale]
     private $currentLocale;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="blogPosts")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'blogPosts')]
     private $user;
 
     public function __construct()
@@ -99,28 +79,20 @@ Things to note:
 
 ```php
 use Doctrine\ORM\Mapping as ORM;
-use Prezent\Doctrine\Translatable\Annotation as Prezent;
+use Prezent\Doctrine\Translatable\Attribute as Prezent;
 use Prezent\Doctrine\Translatable\Entity\AbstractTranslation;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class BlogPostTranslation extends AbstractTranslation
 {
-    /**
-     * @Prezent\Translatable(targetEntity="BlogPost")
-     */
+    #[Prezent\Translatable(targetEntity: BlogPost::class)]
     protected $translatable;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    private $title = "";
+    #[ORM\Column(type: 'string')]
+    private $title = '';
 
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $content = "";
+    #[ORM\Column(type: 'text')]
+    private $content = '';
 
     // Getters and setters
 }
@@ -129,7 +101,7 @@ class BlogPostTranslation extends AbstractTranslation
 Things to note:
 
 * The `title` and `content` fields have been moved from the BlogPost entity to the BlogPostTranslation entity
-* The `translatable` property can be mapped manually, but using the `Translatable` annotation means it will be
+* The `translatable` property can be mapped manually, but using the `Translatable` attribute means it will be
   mapped automatically by this extension.
 
 ## Proxy getters and setters
@@ -213,7 +185,7 @@ The last thing you need to to is setup the translatable listener. If you use Sym
 [prezent/doctrine-translatable-bundle](https://github.com/Prezent/doctrine-translatable-bundle/blob/master/Resources/doc/index.md)
 which does this for you.
 
-First, create the listener instance. It needs a metadata factory in order to read the custom annotations. There is a `DoctrineAdapter`
+First, create the listener instance. It needs a metadata factory in order to read the custom attributes. There is a `DoctrineAdapter`
 that can automatically create the correct drivers based on your Doctrine configuration.
 
 ```php
@@ -230,10 +202,4 @@ Register the listener with your EntityManager:
 
 ```php
 $em->getEventManager()->addEventSubscriber($translatableListener);
-```
-
-And finally, register the new annotations with the autoloader.
-
-```php
-AnnotationRegistry::registerAutoloadNamespace('Prezent\\Doctrine\\Translatable\\Annotation', 'path/to/doctrine-translatable/lib');
 ```
