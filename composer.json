@@ -21,15 +21,15 @@
     },
     "require": {
         "php": ">=8.2",
-        "doctrine/common": "^2.3|^3.0",
+        "doctrine/event-manager": "^1.2|^2.0",
         "doctrine/orm": "^3.5",
         "jms/metadata": "^1.1|^2.0",
-        "symfony/cache": "^6.4|^7.1"
+        "symfony/cache": "^6.4|^7.1|^8.0"
     },
     "require-dev": {
         "doctrine/doctrine-bundle": "^3.0",
-        "symfony/yaml": "^6.4|^7.1",
-        "symfony/var-exporter": "^6.4|^7.1",
+        "symfony/yaml": "^6.4|^7.1|^8.0",
+        "symfony/var-exporter": "^6.4|^7.1|^8.0",
         "phpunit/phpunit": "^8.5 || ^9.6 || ^10.5 || ^11.0"
     },
     "autoload": {
