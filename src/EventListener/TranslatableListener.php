@@ -319,7 +319,6 @@ class TranslatableListener implements EventSubscriber
         }
 
         $reflection = new \ReflectionProperty($class, $property);
-        $reflection->setAccessible(true);
         $reflection->setValue($object, $value);
     }
 }

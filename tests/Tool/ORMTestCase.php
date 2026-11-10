@@ -37,6 +37,11 @@ abstract class ORMTestCase extends TestCase
         // Use Doctrine ORM 3 attribute mapping for the test entities in tests/Fixture
         $config = ORMSetup::createAttributeMetadataConfiguration(array(__DIR__ . '/../Fixture'), true);
 
+        // Symfony 8 removed the LazyGhost proxies, Doctrine ORM then requires PHP 8.4 native lazy objects
+        if (PHP_VERSION_ID >= 80400 && method_exists($config, 'enableNativeLazyObjects')) {
+            $config->enableNativeLazyObjects(true);
+        }
+
         // Doctrine ORM 3/4: always construct EntityManager with a DBAL Connection instance
         $connection = DriverManager::getConnection($conn);
         $em = new EntityManager($connection, $config, $this->getEventManager());
